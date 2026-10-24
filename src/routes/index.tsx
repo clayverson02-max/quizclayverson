@@ -4,11 +4,13 @@ import {
   ArrowLeft, ArrowRight, Check, Stethoscope, Scale, ShoppingBag, Building2, GraduationCap, Wrench,
   MoreHorizontal, UserMinus, Users, BadgeDollarSign, HelpCircle, ShieldCheck, CircleOff, Coins, Wallet,
   Banknote, TrendingUp, Rocket, Smartphone, Headset, UserX, Zap, CalendarDays, Search, AlertTriangle,
-  Target, MessageCircle, Download, X, Loader2, ImageIcon,
+  Target, MessageCircle, X, Loader2,
 } from "lucide-react";
+import { QuizVideo } from "@/components/quiz-video";
+import { QUIZ_VIDEOS } from "@/lib/media";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  PERGUNTAS, PIXEL_ID, LINK_MATERIAL_GRATUITO, FOTO_CLAYVERSON, TEXTO_CONSENTIMENTO_VERSAO, NIVEL_INFO,
+  PERGUNTAS, PIXEL_ID, FOTO_CLAYVERSON, WHATSAPP_NUMBER, TEXTO_CONSENTIMENTO_VERSAO, NIVEL_INFO,
   nivelDe, pontuar, insights, mensagemWhatsApp, linkWhatsApp, mascaraTelefone, telefoneValido,
   type Respostas, type Nivel,
 } from "@/lib/quiz";
@@ -50,7 +52,15 @@ function track(kind: "track" | "trackCustom", name: string, params?: Record<stri
   if (typeof window === "undefined" || !pixelAtivo() || !window.fbq) return;
   if (disparados.has(onceKey)) return;
   disparados.add(onceKey);
-  window.fbq(kind, name, params ?? {});
+  const eventId = crypto.randomUUID();
+  window.fbq(kind, name, params ?? {}, { eventID: eventId });
+  void fetch("/api/meta-events", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
+    keepalive: true,
+    body: JSON.stringify({ name, eventId, sourceUrl: location.href, params: params ?? {} }),
+  }).catch(() => { /* A medição nunca bloqueia o quiz. */ });
 }
 function carregarPixel() {
   if (!pixelAtivo() || window.fbq) return;
@@ -126,7 +136,7 @@ function Index() {
         }} />
     );
   if (step === "analise") return <Analise onDone={() => { history.replaceState({ step: "resultado" }, ""); setStep("resultado"); }} />;
-  if (step === "resultado") return <Resultado nome={nome} respostas={respostas} nivel={nivel} />;
+  if (step === "resultado") return <Resultado nome={nome} telefone={tel} respostas={respostas} nivel={nivel} />;
 
   const idx = Number(step.slice(1));
   const p = PERGUNTAS[idx]!;
@@ -165,7 +175,7 @@ function Rodape({ dark }: { dark?: boolean }) {
 
 function BotaoVerde({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
-    <button {...props} className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-success px-4 text-lg font-extrabold text-success-foreground shadow-lg transition-colors hover:bg-success-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-warning disabled:opacity-60">
+    <button {...props} className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-success px-4 py-3 text-lg font-extrabold text-success-foreground shadow-lg transition-colors hover:bg-success-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-warning disabled:opacity-60">
       {children}
     </button>
   );
@@ -265,9 +275,10 @@ function Meio({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
         <h1 className="mt-3 text-[30px] font-extrabold">Metade do caminho!</h1>
         <p className="mt-2 text-lg">Suas respostas me ajudam a montar um direcionamento só seu, e não um discurso pronto.</p>
         <div className="mt-5"><Chips /></div>
-        {/* PLACEHOLDER: print de resultado real, com autorização do cliente */}
-        <div className="mt-5 flex h-32 w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-base text-muted-foreground">
-          <ImageIcon aria-hidden /> Espaço para print de resultado real
+        <div className="mt-5 w-full space-y-3">
+          <h2 className="text-2xl font-extrabold leading-tight">Veja os contatos chegando ao WhatsApp</h2>
+          <p className="text-lg">Um registro real de pessoas entrando em contato com um negócio.</p>
+          <QuizVideo media={QUIZ_VIDEOS.whatsapp} />
         </div>
         <div className="mt-6 w-full"><BotaoVerde onClick={onNext}>CONTINUAR <ArrowRight aria-hidden /></BotaoVerde></div>
       </section>
@@ -411,12 +422,14 @@ function Medidor({ nivel }: { nivel: Nivel }) {
   );
 }
 
-function Resultado({ nome, respostas, nivel }: { nome: string; respostas: Respostas; nivel: Nivel }) {
+function Resultado({ nome, telefone, respostas, nivel }: { nome: string; telefone: string; respostas: Respostas; nivel: Nivel }) {
+  const [erroContato, setErroContato] = useState("");
   const info = NIVEL_INFO[nivel];
   const lista = insights(respostas);
   const abrirWhats = () => {
+    if (!/^55\d{10,11}$/.test(WHATSAPP_NUMBER.replace(/\D/g, ""))) { setErroContato("O contato está sendo configurado. Tente novamente em instantes."); return; }
     track("track", "Contact");
-    const url = linkWhatsApp(mensagemWhatsApp(nome, respostas, nivel));
+    const url = linkWhatsApp(mensagemWhatsApp(nome, respostas, nivel, telefone));
     setTimeout(() => { window.location.href = url; }, 200);
   };
   return (
@@ -440,17 +453,19 @@ function Resultado({ nome, respostas, nivel }: { nome: string; respostas: Respos
             </ul>
           </div>
         )}
-        {nivel === "FRIO" ? (
-          <>
-            <BotaoVerde onClick={() => { window.location.href = LINK_MATERIAL_GRATUITO; }}><Download aria-hidden /> BAIXAR O MATERIAL GRATUITO</BotaoVerde>
-            <button onClick={abrirWhats} className="mx-auto min-h-12 px-3 text-base font-semibold text-primary underline">Mesmo assim, quero falar com o Clayverson</button>
-          </>
-        ) : (
-          <>
-            <BotaoVerde onClick={abrirWhats}><MessageCircle aria-hidden /> FALAR COM O CLAYVERSON NO WHATSAPP</BotaoVerde>
-            <p className="text-center text-base text-muted-foreground">Seu resumo vai junto na mensagem. Você não precisa repetir nada.</p>
-          </>
-        )}
+        <section aria-label="Depoimento de cliente" className="space-y-3 rounded-2xl border-2 border-border bg-card p-4">
+          <h2 className="text-center text-2xl font-extrabold leading-tight">Quem já trabalhou comigo conta</h2>
+          <p className="text-center text-lg">Ouça o depoimento de um cliente de moda masculina sobre o trabalho que fizemos juntos.</p>
+          <QuizVideo media={QUIZ_VIDEOS.depoimento} />
+        </section>
+        <div className="rounded-2xl border-2 border-success bg-success/10 p-5">
+          <h2 className="text-2xl font-extrabold leading-tight">Você concluiu o quiz e tem direito a uma consultoria gratuita comigo.</h2>
+          <p className="mt-3 text-lg">Vamos olhar a estrutura atual do seu negócio, seus anúncios e os pontos que podem melhorar para atrair mais clientes e aproveitar melhor as oportunidades de venda.</p>
+          <p className="mt-3 text-lg font-semibold">Entre em contato para combinarmos nossa reunião.</p>
+        </div>
+        <BotaoVerde onClick={abrirWhats}><MessageCircle className="shrink-0" aria-hidden /> QUERO MINHA CONSULTORIA GRATUITA</BotaoVerde>
+        {erroContato && <p role="alert" className="text-center text-base font-semibold text-destructive">{erroContato}</p>}
+        <p className="text-center text-base text-muted-foreground">Seu resumo completo vai na mensagem do WhatsApp. Você não precisa responder tudo de novo.</p>
         <Rodape />
       </section>
     </main>

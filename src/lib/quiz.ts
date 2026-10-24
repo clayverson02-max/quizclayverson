@@ -1,6 +1,6 @@
 // ====== CONSTANTES EDITÁVEIS ======
 export const WHATSAPP_NUMBER = "[55DDDNÚMERO]"; // ex.: 5511912345678
-export const PIXEL_ID = "[PIXEL_ID]";
+export const PIXEL_ID = "1418598996441763";
 export const LINK_MATERIAL_GRATUITO = "[URL]";
 export const FOTO_CLAYVERSON = "/clayverson.webp";
 export const TEXTO_CONSENTIMENTO_VERSAO = "v1-2026-10-24";
@@ -158,11 +158,15 @@ export function insights(r: Respostas): Insight[] {
   return out.slice(0, 3);
 }
 
-export function mensagemWhatsApp(nome: string, r: Respostas, nivel: Nivel): string {
+export function mensagemWhatsApp(nome: string, r: Respostas, nivel: Nivel, telefone = ""): string {
   const i = NIVEL_INFO[nivel];
   return [
-    "Olá, Clayverson! Fiz o diagnóstico no seu site.",
+    "Olá, Clayverson! Concluí o diagnóstico e quero agendar minha consultoria gratuita para o meu negócio.",
+    "Quero analisar minha estrutura atual, meus anúncios e o que posso melhorar.",
+    "",
+    "📋 RESUMO DO MEU DIAGNÓSTICO",
     `Nome: ${nome}`,
+    `WhatsApp informado: ${telefone}`,
     `Segmento: ${r.segmento ?? ""}`,
     `Maior desafio: ${r.desafio ?? ""}`,
     `Faturamento mensal: ${r.faturamento ?? ""}`,
