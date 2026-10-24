@@ -1,5 +1,5 @@
 // ====== CONSTANTES EDITÁVEIS ======
-export const WHATSAPP_NUMBER = "[55DDDNÚMERO]"; // ex.: 5511912345678
+export const WHATSAPP_NUMBER = "5585996288719";
 export const PIXEL_ID = "1418598996441763";
 export const LINK_MATERIAL_GRATUITO = "[URL]";
 export const FOTO_CLAYVERSON = "/clayverson.webp";
