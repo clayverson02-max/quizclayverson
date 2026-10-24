@@ -3,7 +3,7 @@ import { PIXEL_ID } from "@/lib/quiz";
 const names = new Set([
   "PageView",
   "Lead",
-  "Contact",
+  "InitiateCheckout",
   "Quiz_Start",
   "Quiz_Step",
   "Quiz_Quente",

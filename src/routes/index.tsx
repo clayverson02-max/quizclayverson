@@ -130,7 +130,6 @@ function Index() {
       <Contato nome={nome} setNome={setNome} tel={tel} setTel={setTel} onBack={voltar}
         respostas={respostas}
         onDone={(n) => {
-          track("track", "Lead", { nivel: n });
           track("trackCustom", n === "QUENTE" ? "Quiz_Quente" : n === "MORNO" ? "Quiz_Morno" : "Quiz_Frio");
           go("analise");
         }} />
@@ -149,6 +148,9 @@ function Index() {
       onPick={(label) => {
         setRespostas((r) => ({ ...r, [p.id]: label }));
         track("trackCustom", "Quiz_Step", { etapa: p.etapa }, "step-" + p.id);
+        if (idx === PERGUNTAS.length - 1) {
+          track("track", "InitiateCheckout", { etapa: p.etapa });
+        }
         setTimeout(() => go(idx === 2 ? "meio" : idx === 5 ? "contato" : (`q${idx + 1}` as Step)), 300);
       }}
     />
@@ -428,7 +430,8 @@ function Resultado({ nome, telefone, respostas, nivel }: { nome: string; telefon
   const lista = insights(respostas);
   const abrirWhats = () => {
     if (!/^55\d{10,11}$/.test(WHATSAPP_NUMBER.replace(/\D/g, ""))) { setErroContato("O contato está sendo configurado. Tente novamente em instantes."); return; }
-    track("track", "Contact");
+    // O site mede a abertura do WhatsApp, não confirma o envio da mensagem.
+    track("track", "Lead", { nivel });
     const url = linkWhatsApp(mensagemWhatsApp(nome, respostas, nivel, telefone));
     setTimeout(() => { window.location.href = url; }, 200);
   };
