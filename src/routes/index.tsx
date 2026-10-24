@@ -175,7 +175,7 @@ function Capa({ onStart }: { onStart: () => void }) {
   return (
     <main className="min-h-[100dvh] bg-navy text-navy-foreground">
       <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col items-center px-5 pt-8 text-center anim-in">
-        <span className="rounded-full bg-warning px-4 py-1.5 text-base font-extrabold text-foreground">DIAGNÓSTICO GRATUITO · 1 MINUTO</span>
+        <span className="rounded-full bg-warning px-3 py-1.5 text-base whitespace-nowrap font-extrabold text-foreground">DIAGNÓSTICO GRATUITO · 1 MINUTO</span>
         <h1 className="mt-5 text-[30px] font-extrabold leading-tight">Seu negócio está pronto para ter mais clientes com anúncios?</h1>
         <p className="mt-3 text-lg text-navy-foreground/90">Responda 6 perguntas rápidas. Eu analiso o seu cenário e te chamo no WhatsApp com um direcionamento para o seu caso.</p>
         <img src={FOTO_CLAYVERSON} alt="Clayverson Demontier, gestor de tráfego pago" width={160} height={160}
@@ -366,11 +366,13 @@ function Politica({ onClose }: { onClose: () => void }) {
 function Analise({ onDone }: { onDone: () => void }) {
   const itens = ["Entendendo seu segmento", "Avaliando seu momento", "Montando seu direcionamento"];
   const [n, setN] = useState(0);
+  const done = useRef(onDone);
+  done.current = onDone;
   useEffect(() => {
     const t = [700, 1500, 2200].map((ms, i) => setTimeout(() => setN(i + 1), ms));
-    const fim = setTimeout(onDone, 2500);
+    const fim = setTimeout(() => done.current(), 2500);
     return () => { t.forEach(clearTimeout); clearTimeout(fim); };
-  }, [onDone]);
+  }, []);
   return (
     <main className="flex min-h-[100dvh] items-center justify-center px-5">
       <div className="w-full max-w-md text-center anim-in" aria-live="polite">
@@ -379,7 +381,7 @@ function Analise({ onDone }: { onDone: () => void }) {
         <ul className="mt-6 space-y-3 text-left">
           {itens.map((t, i) => (
             <li key={t} className={`flex items-center gap-3 rounded-2xl border-2 p-4 text-lg font-semibold transition-colors ${i < n ? "border-success bg-success/10" : "border-border bg-card text-muted-foreground"}`}>
-              {i < n ? <Check className="text-success" aria-hidden /> : <Loader2 className="animate-spin" aria-hidden />}{t}{i < n ? " ✓" : ""}
+              {i < n ? <Check className="text-success" aria-hidden /> : <Loader2 className="animate-spin" aria-hidden />}{t}
             </li>
           ))}
         </ul>
