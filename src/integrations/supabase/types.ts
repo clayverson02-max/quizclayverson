@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      leads: {
+        Row: {
+          atendimento: string
+          consentimento: boolean
+          criado_em: string
+          desafio: string
+          faturamento: string
+          fbclid: string | null
+          id: string
+          investimento: string
+          nivel: string
+          nome: string
+          pontuacao: number
+          prazo: string
+          segmento: string
+          texto_consentimento_versao: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+          whatsapp: string
+        }
+        Insert: {
+          atendimento: string
+          consentimento: boolean
+          criado_em?: string
+          desafio: string
+          faturamento: string
+          fbclid?: string | null
+          id?: string
+          investimento: string
+          nivel: string
+          nome: string
+          pontuacao: number
+          prazo: string
+          segmento: string
+          texto_consentimento_versao: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          whatsapp: string
+        }
+        Update: {
+          atendimento?: string
+          consentimento?: boolean
+          criado_em?: string
+          desafio?: string
+          faturamento?: string
+          fbclid?: string | null
+          id?: string
+          investimento?: string
+          nivel?: string
+          nome?: string
+          pontuacao?: number
+          prazo?: string
+          segmento?: string
+          texto_consentimento_versao?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
