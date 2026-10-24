@@ -138,7 +138,7 @@ export const NIVEL_INFO: Record<Nivel, { titulo: string; texto: string; resumo: 
   },
 };
 
-const FOCOS: Record<string, string> = {
+const FOCOS: Partial<Record<string, string>> = {
   "Poucos clientes chegando": "Seu foco inicial: gerar mais contatos com o público certo.",
   "Chega gente, mas poucos compram": "Seu foco: qualificar quem chega e melhorar o atendimento comercial.",
   "Pago caro por cada contato": "Seu foco: reduzir o custo de cada contato.",
@@ -149,7 +149,8 @@ const FOCOS: Record<string, string> = {
 export type Insight = { texto: string; tipo: "foco" | "alerta" };
 export function insights(r: Respostas): Insight[] {
   const out: Insight[] = [];
-  if (r.desafio && FOCOS[r.desafio]) out.push({ texto: FOCOS[r.desafio], tipo: "foco" });
+  const foco = r.desafio ? FOCOS[r.desafio] : undefined;
+  if (foco) out.push({ texto: foco, tipo: "foco" });
   if (r.atendimento === "Ainda não tenho ninguém")
     out.push({ texto: "Alerta: sem alguém para responder rápido, os contatos esfriam.", tipo: "alerta" });
   if (r.investimento === INVESTIMENTO_FRIO)

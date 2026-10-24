@@ -60,7 +60,7 @@ function carregarPixel() {
   window.fbq = n; window._fbq = n;
   const s = document.createElement("script"); s.async = true; s.src = "https://connect.facebook.net/en_US/fbevents.js";
   document.head.appendChild(s);
-  window.fbq("init", PIXEL_ID, {}, { agent: "lovable" });
+  n("init", PIXEL_ID, {}, { agent: "lovable" });
   track("track", "PageView");
 }
 
@@ -129,7 +129,7 @@ function Index() {
   if (step === "resultado") return <Resultado nome={nome} respostas={respostas} nivel={nivel} />;
 
   const idx = Number(step.slice(1));
-  const p = PERGUNTAS[idx];
+  const p = PERGUNTAS[idx]!;
   return (
     <Pergunta
       idx={idx}
@@ -227,8 +227,8 @@ function Topo({ onBack, preenchidas, atual }: { onBack: () => void; preenchidas:
   );
 }
 
-function Pergunta({ idx, selecionada, onPick, onBack }: { idx: number; selecionada?: string; onPick: (l: string) => void; onBack: () => void }) {
-  const p = PERGUNTAS[idx];
+function Pergunta({ idx, selecionada, onPick, onBack }: { idx: number; selecionada?: string | undefined; onPick: (l: string) => void; onBack: () => void }) {
+  const p = PERGUNTAS[idx]!;
   const [pick, setPick] = useState<string | undefined>(undefined);
   return (
     <main className="flex h-[100dvh] flex-col overflow-hidden">
@@ -299,8 +299,8 @@ function Contato({ nome, setNome, tel, setTel, onBack, onDone, respostas }: {
       segmento: respostas.segmento ?? "", desafio: respostas.desafio ?? "", faturamento: respostas.faturamento ?? "",
       investimento: respostas.investimento ?? "", atendimento: respostas.atendimento ?? "", prazo: respostas.prazo ?? "",
       pontuacao: pontuar(respostas), nivel,
-      utm_source: utm.utm_source ?? null, utm_medium: utm.utm_medium ?? null, utm_campaign: utm.utm_campaign ?? null,
-      utm_content: utm.utm_content ?? null, utm_term: utm.utm_term ?? null, fbclid: utm.fbclid ?? null,
+      utm_source: utm["utm_source"] ?? null, utm_medium: utm["utm_medium"] ?? null, utm_campaign: utm["utm_campaign"] ?? null,
+      utm_content: utm["utm_content"] ?? null, utm_term: utm["utm_term"] ?? null, fbclid: utm["fbclid"] ?? null,
       consentimento: true, texto_consentimento_versao: TEXTO_CONSENTIMENTO_VERSAO,
     });
     setEnviando(false);
