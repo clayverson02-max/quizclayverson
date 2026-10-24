@@ -18,7 +18,7 @@ describe("pontuação e nível", () => {
   it("investimento menor que R$ 1.000 é sempre FRIO", () =>
     expect(nivelDe({ ...base, faturamento: "Acima de R$ 300 mil", investimento: "Menos de R$ 1.000" })).toBe("FRIO"));
   it("5 pontos é FRIO", () =>
-    expect(nivelDe({ ...base, faturamento: "Até R$ 10 mil", investimento: "R$ 1.000 a 3.000", atendimento: "Ainda não tenho ninguém", prazo: "Nos próximos 30 dias" })).toBe("MORNO".length ? "FRIO" : ""));
+    expect(nivelDe({ ...base, faturamento: "Até R$ 10 mil", investimento: "R$ 1.000 a 3.000", atendimento: "Ainda não tenho ninguém", prazo: "Nos próximos 30 dias" })).toBe("FRIO"));
   it("6 pontos é MORNO", () =>
     expect(nivelDe({ ...base, faturamento: "Até R$ 10 mil", investimento: "R$ 1.000 a 3.000", atendimento: "Eu mesmo, pelo WhatsApp", prazo: "Nos próximos 30 dias" })).toBe("MORNO"));
   it("10 pontos é MORNO e 11 é QUENTE", () => {
