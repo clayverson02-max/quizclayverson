@@ -91,7 +91,7 @@ const st = {cfg:null, tab:'todos', chat:[], ents:[], reqs:[], aj:''};
 let db = null;
 function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('on'), 2600); }
 function agents(){ return ((st.cfg && st.cfg.agents) || []).filter(a => ALL[a]); }
-function proxima(){ const d = new Date(); const n = new Date(d); const m = d.getMinutes(); if (m < 13) n.setMinutes(13,0,0); else if (m < 43) n.setMinutes(43,0,0); else { n.setHours(n.getHours()+1); n.setMinutes(13,0,0); } return n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function proxima(){ const d = new Date(); const n = new Date(d); const m = d.getMinutes(); const r = [3,13,23,33,43].find(x => x > m); if (r !== undefined) n.setMinutes(r,0,0); else { n.setHours(n.getHours()+1); n.setMinutes(3,0,0); } return n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
 function render(){
   const c = st.cfg;
   if (c){ $('nome').textContent = 'Olá, ' + (c.nome || 'cliente'); $('plano').textContent = PLANOS[c.plano] || c.plano || ''; document.title = 'Portal · ' + (c.nome || 'Cliente'); }
@@ -101,7 +101,7 @@ function render(){
   $('tabs').innerHTML = tabs.map(([id,n,col]) => `<button class="tab" type="button" data-tab="${id}" aria-current="${st.tab===id}"><span class="d" style="background:${col}"></span>${esc(n)}${pend(id) ? `<span class="b">${pend(id)}</span>` : ''}</button>`).join('');
   const a = ALL[st.tab];
   $('chat-title').textContent = a ? 'Conversa com ' + a.name + ' · ' + a.role : 'Conversa com a equipe toda';
-  $('eta').textContent = 'A equipe responde e entrega a cada 30 minutos. Próxima rodada: ' + proxima() + '.';
+  $('eta').textContent = 'A equipe responde e entrega em até 10 minutos. Próxima rodada: ' + proxima() + '.';
   const msgs = st.chat.filter(m => st.tab === 'todos' ? true : m.agent === st.tab);
   const box = $('chat'); const atEnd = box.scrollHeight - box.scrollTop - box.clientHeight < 40;
   box.innerHTML = msgs.length ? msgs.map(m => {
