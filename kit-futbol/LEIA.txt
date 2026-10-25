@@ -1,0 +1,5 @@
+Kit de videos de futbol (perfil devo.s3, espanhol LATAM).
+1) Extraia os clips: for i in 1 2 3 4; do mkdir -p /home/claude/futbol/clips/t$i; ffmpeg -i clips/training-$i.mp4 -vf "fps=30,scale=540:960:force_original_aspect_ratio=increase,crop=540:960" -q:v 3 /home/claude/futbol/clips/t$i/%04d.jpg; done
+2) Vozes: bash ../narrar.sh baixa o motor; para espanhol baixe vits-piper-es_MX-claude-high (ou es_MX-ald-medium) em /home/claude/tts (mesmo padrao de URL do narrar.sh).
+3) Copie gen.py e gen2.py para /home/claude/futbol, escreva specs2.json com novas cenas (estilos: full, split, card, premium, warn) e rode: python3 gen2.py <nome>. Saida em /home/claude/futbol/out2.
+Varie SEMPRE estilo, cores, clip de fundo, gancho e transicoes entre videos.

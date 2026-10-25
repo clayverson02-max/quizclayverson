@@ -1,0 +1,658 @@
+[
+ {
+  "name": "v1_entrenador_sin_plan",
+  "tag": "PARA ENTRENADORES",
+  "seed": 1,
+  "bpm": 118,
+  "clip": "t1",
+  "style": {
+   "mode": "full",
+   "font": "poppins",
+   "accent": [
+    198,
+    255,
+    61
+   ],
+   "on_accent": [
+    10,
+    14,
+    12
+   ],
+   "text": [
+    255,
+    255,
+    255
+   ],
+   "hl": "box",
+   "anim": "pop",
+   "ty": 560
+  },
+  "scenes": [
+   {
+    "lines": [
+     "¿CANSADO DE",
+     "ENTRENAR SIN",
+     "UN PLAN CLARO?"
+    ],
+    "accent": [
+     "PLAN",
+     "CLARO"
+    ],
+    "say": "¿Eres entrenador y estás cansado de entrenar sin un plan claro?",
+    "clip": "t3",
+    "cs": 0,
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "CADA SESIÓN",
+     "IMPROVISAS"
+    ],
+    "accent": [
+     "IMPROVISAS"
+    ],
+    "say": "Cada sesión improvisas y repites lo mismo",
+    "clip": "t4",
+    "cs": 2,
+    "tr": "whip",
+    "min": 2.0
+   },
+   {
+    "lines": [
+     "Y TU EQUIPO",
+     "NO EVOLUCIONA"
+    ],
+    "accent": [
+     "NO",
+     "EVOLUCIONA"
+    ],
+    "say": "y tu equipo no evoluciona.",
+    "clip": "t3",
+    "cs": 8,
+    "tr": "glitch",
+    "min": 1.9
+   },
+   {
+    "lines": [
+     "+2.000",
+     "EJERCICIOS"
+    ],
+    "accent": [
+     "EJERCICIOS"
+    ],
+    "say": "Ahora tienes más de dos mil ejercicios organizados por posición y categoría.",
+    "clip": "t2",
+    "cs": 1,
+    "prop": "phone",
+    "tr": "zoom",
+    "y": 430,
+    "min": 3.0
+   },
+   {
+    "lines": [
+     "TU ENTRENO",
+     "LISTO EN",
+     "15 MINUTOS"
+    ],
+    "accent": [
+     "15",
+     "MINUTOS"
+    ],
+    "say": "Prepara tu entrenamiento en quince minutos.",
+    "clip": "t1",
+    "cs": 3,
+    "tr": "whip",
+    "min": 2.2
+   },
+   {
+    "lines": [
+     "ENTRENA CON",
+     "MÉTODO"
+    ],
+    "accent": [
+     "MÉTODO"
+    ],
+    "say": "Toca el botón y entrena con método.",
+    "clip": "t4",
+    "cs": 6,
+    "prop": "cta",
+    "sub": "Pago único · Garantía de 7 días",
+    "tr": "flash",
+    "min": 2.6
+   }
+  ]
+ },
+ {
+  "name": "v2_jugador_banco",
+  "tag": "PARA JUGADORES",
+  "seed": 2,
+  "bpm": 132,
+  "speed": 0.86,
+  "style": {
+   "mode": "split",
+   "font": "cond_i",
+   "accent": [
+    255,
+    214,
+    0
+   ],
+   "on_accent": [
+    12,
+    12,
+    12
+   ],
+   "text": [
+    255,
+    255,
+    255
+   ],
+   "panel": [
+    14,
+    14,
+    16
+   ],
+   "hl": "tape",
+   "anim": "slide",
+   "ty": 1460,
+   "size": 104,
+   "lh": 1.05,
+   "tagy": 90,
+   "round": false,
+   "cta": "QUIERO MEJORAR"
+  },
+  "scenes": [
+   {
+    "lines": [
+     "¿ENTRENAS TODOS LOS DÍAS",
+     "Y SIGUES EN EL BANCO?"
+    ],
+    "accent": [
+     "BANCO?",
+     "BANCO"
+    ],
+    "size": 82,
+    "say": "¿Entrenas todos los días y sigues en el banco?",
+    "clip": "t2",
+    "cs": 0,
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "NO TE FALTAN",
+     "GANAS"
+    ],
+    "accent": [
+     "GANAS"
+    ],
+    "say": "No te faltan ganas.",
+    "clip": "t4",
+    "cs": 3,
+    "tr": "glitch",
+    "min": 1.5
+   },
+   {
+    "lines": [
+     "TE FALTA",
+     "MÉTODO"
+    ],
+    "accent": [
+     "MÉTODO"
+    ],
+    "say": "Te falta método.",
+    "clip": "t2",
+    "cs": 6,
+    "tr": "glitch",
+    "min": 1.5
+   },
+   {
+    "lines": [
+     "EJERCICIOS PARA",
+     "TU POSICIÓN"
+    ],
+    "accent": [
+     "TU",
+     "POSICIÓN"
+    ],
+    "size": 90,
+    "say": "Ejercicios de regate, tiro, pase y agilidad para tu posición.",
+    "clip": "t4",
+    "cs": 8,
+    "tr": "whip",
+    "min": 2.8
+   },
+   {
+    "lines": [
+     "REGATE · TIRO",
+     "PASE · AGILIDAD"
+    ],
+    "accent": [
+     "TIRO",
+     "AGILIDAD"
+    ],
+    "size": 90,
+    "say": "Más de dos mil ejercicios en tu celular.",
+    "clip": "t1",
+    "cs": 1,
+    "tr": "whip",
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "GÁNATE TU",
+     "LUGAR"
+    ],
+    "accent": [
+     "LUGAR"
+    ],
+    "say": "Toca el botón y gánate tu lugar en el equipo.",
+    "clip": "t3",
+    "cs": 12,
+    "prop": "cta",
+    "py": 1720,
+    "y": 1380,
+    "sub": "",
+    "tr": "flash",
+    "min": 2.6
+   }
+  ]
+ },
+ {
+  "name": "v3_categorias_infantiles",
+  "tag": "SUB-8 A SUB-15",
+  "seed": 3,
+  "bpm": 108,
+  "voice": "vits-piper-es_MX-ald-medium",
+  "style": {
+   "mode": "card",
+   "font": "poppins_i",
+   "accent": [
+    255,
+    122,
+    0
+   ],
+   "on_accent": [
+    255,
+    255,
+    255
+   ],
+   "text": [
+    24,
+    30,
+    48
+   ],
+   "panel": [
+    250,
+    246,
+    236
+   ],
+   "hl": "box",
+   "anim": "drop",
+   "ty": 520,
+   "size": 92,
+   "shadow": false,
+   "tagbg": [
+    255,
+    255,
+    255
+   ],
+   "body": "poppins",
+   "tagy": 200
+  },
+  "scenes": [
+   {
+    "lines": [
+     "¿TUS NIÑOS",
+     "SE ABURREN",
+     "EN EL ENTRENO?"
+    ],
+    "accent": [
+     "ABURREN"
+    ],
+    "say": "¿Tus niños se aburren en el entrenamiento?",
+    "clip": "t4",
+    "cs": 0,
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "SI SE ABURREN",
+     "NO APRENDEN"
+    ],
+    "accent": [
+     "NO",
+     "APRENDEN"
+    ],
+    "say": "Si se aburren, no aprenden. Y se van del equipo.",
+    "clip": "t3",
+    "cs": 4,
+    "tr": "slideup",
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "EJERCICIOS",
+     "DINÁMICOS"
+    ],
+    "accent": [
+     "DINÁMICOS"
+    ],
+    "say": "Ejercicios dinámicos, organizados por categoría, de sub ocho a adultos.",
+    "nocard": true,
+    "prop": "check",
+    "py": 760,
+    "items": [
+     "Sub-8 y Sub-10",
+     "Sub-12 y Sub-15",
+     "Juveniles y adultos",
+     "Juegos y circuitos"
+    ],
+    "tr": "circle",
+    "min": 3.4
+   },
+   {
+    "lines": [
+     "+2.000",
+     "EJERCICIOS"
+    ],
+    "accent": [
+     "EJERCICIOS"
+    ],
+    "say": "Más de dos mil ejercicios listos para aplicar hoy.",
+    "clip": "t1",
+    "cs": 2,
+    "tr": "slideup",
+    "min": 2.6
+   },
+   {
+    "lines": [
+     "ENTRENOS QUE",
+     "ENGANCHAN"
+    ],
+    "accent": [
+     "ENGANCHAN"
+    ],
+    "say": "Toca el botón y haz entrenamientos que enganchan.",
+    "nocard": true,
+    "prop": "cta",
+    "py": 1180,
+    "sub": "Pago único · Garantía de 7 días",
+    "tr": "circle",
+    "y": 620,
+    "min": 2.6
+   }
+  ]
+ },
+ {
+  "name": "v4_valor_precio",
+  "tag": "OFERTA ESPECIAL",
+  "seed": 4,
+  "bpm": 100,
+  "style": {
+   "mode": "premium",
+   "font": "serif",
+   "accent": [
+    232,
+    190,
+    92
+   ],
+   "on_accent": [
+    16,
+    20,
+    40
+   ],
+   "text": [
+    255,
+    255,
+    255
+   ],
+   "panel": [
+    10,
+    16,
+    40
+   ],
+   "hl": "under",
+   "anim": "rise",
+   "ty": 520,
+   "size": 104,
+   "cta": "QUIERO ACCESO"
+  },
+  "scenes": [
+   {
+    "lines": [
+     "Esto cuesta",
+     "menos que",
+     "un par de medias"
+    ],
+    "accent": [
+     "MEDIAS"
+    ],
+    "say": "Esto cuesta menos que un par de medias de fútbol.",
+    "clip": "t2",
+    "cs": 0,
+    "prop": "ball",
+    "py": 1350,
+    "min": 2.6
+   },
+   {
+    "lines": [
+     "Más de"
+    ],
+    "accent": [],
+    "say": "Más de dos mil ejercicios de fútbol.",
+    "clip": "t3",
+    "cs": 3,
+    "prop": "counter",
+    "py": 900,
+    "y": 760,
+    "tr": "zoom",
+    "min": 2.6
+   },
+   {
+    "lines": [
+     "Todo",
+     "organizado"
+    ],
+    "accent": [
+     "ORGANIZADO"
+    ],
+    "say": "Organizados por posición y categoría. Físicos, tácticos y técnicos.",
+    "clip": "t4",
+    "cs": 2,
+    "prop": "phone",
+    "py": 820,
+    "y": 420,
+    "tr": "zoom",
+    "min": 3.0
+   },
+   {
+    "lines": [
+     "+ 4 bonos"
+    ],
+    "accent": [
+     "BONOS"
+    ],
+    "say": "Y además, cuatro bonos.",
+    "clip": "t1",
+    "cs": 4,
+    "prop": "check",
+    "py": 780,
+    "y": 520,
+    "items": [
+     "Guía de entrenamiento",
+     "50 ejercicios de técnica",
+     "Circuitos de físico",
+     "Bono sorpresa"
+    ],
+    "tr": "zoom",
+    "min": 3.0
+   },
+   {
+    "lines": [
+     "Pago único"
+    ],
+    "accent": [
+     "ÚNICO"
+    ],
+    "say": "Pago único, con siete días de garantía.",
+    "clip": "t2",
+    "cs": 5,
+    "prop": "price",
+    "big": "USD 6,50",
+    "small": "Garantía de 7 días",
+    "tr": "flash",
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "Accede",
+     "hoy"
+    ],
+    "accent": [
+     "HOY"
+    ],
+    "say": "Toca el botón y accede ahora.",
+    "clip": "t3",
+    "cs": 9,
+    "prop": "cta",
+    "sub": "Acceso inmediato por e-mail",
+    "tr": "zoom",
+    "min": 2.4
+   }
+  ]
+ },
+ {
+  "name": "v5_error_entrenadores",
+  "tag": "ERROR COMÚN",
+  "seed": 5,
+  "bpm": 122,
+  "style": {
+   "mode": "warn",
+   "font": "news",
+   "accent": [
+    255,
+    205,
+    0
+   ],
+   "on_accent": [
+    15,
+    15,
+    15
+   ],
+   "text": [
+    255,
+    255,
+    255
+   ],
+   "hl": "box",
+   "anim": "pop",
+   "ty": 560,
+   "size": 100,
+   "tagy": 120,
+   "stroke": 2,
+   "stroke_col": [
+    0,
+    0,
+    0
+   ]
+  },
+  "scenes": [
+   {
+    "lines": [
+     "EL ERROR #1",
+     "DE LOS",
+     "ENTRENADORES"
+    ],
+    "accent": [
+     "ERROR",
+     "#1"
+    ],
+    "say": "El error número uno de los entrenadores amateur.",
+    "clip": "t1",
+    "cs": 0,
+    "bad": true,
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "REPETIR SIEMPRE",
+     "EL MISMO",
+     "ENTRENO"
+    ],
+    "accent": [
+     "MISMO"
+    ],
+    "say": "Repetir siempre el mismo entrenamiento.",
+    "clip": "t1",
+    "cs": 0,
+    "bad": true,
+    "xmark": true,
+    "tr": "glitch",
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "EL EQUIPO",
+     "SE ACOSTUMBRA",
+     "Y DEJA DE MEJORAR"
+    ],
+    "accent": [
+     "DEJA",
+     "MEJORAR"
+    ],
+    "size": 88,
+    "say": "El equipo se acostumbra y deja de mejorar.",
+    "clip": "t3",
+    "cs": 5,
+    "bad": true,
+    "tr": "glitch",
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "VARÍA CADA",
+     "SESIÓN"
+    ],
+    "accent": [
+     "VARÍA"
+    ],
+    "say": "Varía cada sesión con más de dos mil ejercicios físicos, tácticos y técnicos.",
+    "clip": "t4",
+    "cs": 4,
+    "prop": "board",
+    "py": 1080,
+    "tr": "flash",
+    "min": 3.4
+   },
+   {
+    "lines": [
+     "ENTRENOS NUEVOS",
+     "CADA SEMANA"
+    ],
+    "accent": [
+     "NUEVOS"
+    ],
+    "say": "Entrenos nuevos cada semana, en quince minutos.",
+    "clip": "t2",
+    "cs": 3,
+    "tr": "whip",
+    "min": 2.4
+   },
+   {
+    "lines": [
+     "DEJA DE",
+     "REPETIR"
+    ],
+    "accent": [
+     "REPETIR"
+    ],
+    "say": "Toca el botón y deja de repetir.",
+    "clip": "t3",
+    "cs": 14,
+    "prop": "cta",
+    "sub": "Pago único · Garantía de 7 días",
+    "tr": "zoom",
+    "min": 2.4
+   }
+  ]
+ }
+]
