@@ -6,3 +6,9 @@ Varie SEMPRE estilo, cores, clip de fundo, gancho e transicoes entre videos.
 
 CLIPS DISPONIVEIS (kit-futbol/clips): training-1 (finalizacao), training-2 (chute), training-3 (ataque/pontas), training-4 (drible e passe), campo-equipo (equipe em campo, 94 s, com legendas em espanhol; use trechos variados).
 VARIEDADE OBRIGATORIA: nunca repita a mesma combinacao clip+estilo+cores dois dias seguidos. Alterne trechos (cs) diferentes dos clips, espelhe horizontalmente (ImageOps.mirror), troque crop/zoom, color grade (frio, quente, P&B), e use imagens de cenarios variados geradas no Canva (generate-image: campos de terra, futsal, campo sintetico a noite, escolinha infantil, vestiario, prancheta) como fundo com zoom lento.
+
+AVATAR DO TREINADOR (EXCLUSIVO DO PROJETO @devo.s3 / +2.000 Ejercicios de Futbol; PROIBIDO usar em qualquer outro cliente, perfil ou projeto):
+- Recorte pronto: kit-futbol/avatar/coach_cut.png -> copie para /home/claude/futbol/avatar/coach_cut.png
+- Na cena use "coach": "close" | "mid" | "left" | "right" | "low" (enquadramentos diferentes = cortes e angulos). Ele reage ao volume da voz (balanco sutil). Exemplo completo: specs3.json.
+- Estrategia: alterne angulos a cada cena (close no gancho, right/left junto da prancheta, low no erro comum, mid no CTA); teste versoes com e sem o treinador; nunca o mesmo enquadramento em cenas seguidas.
+- Ele nao mexe a boca (sem lip-sync). Texto e narracao carregam a explicacao; nao escreva que ele "esta falando" de verdade.

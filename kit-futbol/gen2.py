@@ -136,6 +136,31 @@ def stripes(w, h, off):
     for x in range(-h * 2, w + h, 70): d.polygon([(x + off, 0), (x + off + 35, 0), (x + off + 35 - h, h), (x + off - h, h)], fill=(15, 15, 15, 255))
     return im
 
+
+_coach = {}
+def coach_img(h, mirror=False):
+    k = (h, mirror)
+    if k not in _coach:
+        im = Image.open('/home/claude/futbol/avatar/coach_cut.png').convert('RGBA')
+        if mirror: im = ImageOps.mirror(im)
+        im = im.resize((int(im.width * h / im.height), h), Image.LANCZOS)
+        a = im.getchannel('A'); glow = Image.new('RGBA', im.size, (255, 255, 255, 0)); glow.putalpha(a.filter(ImageFilter.MaxFilter(9)).point(lambda v: int(v * .9)))
+        out = Image.new('RGBA', (im.width + 20, im.height + 20), (0, 0, 0, 0)); out.alpha_composite(glow, (10, 10)); out.alpha_composite(im, (10, 10))
+        _coach[k] = out
+    return _coach[k]
+
+def draw_coach(frame, mode, lt, amp, accent):
+    # framings: close (rosto grande), mid (meio corpo), left/right (canto, espelhado), low (de baixo)
+    cfg = {'close': (1750, W / 2, 2000, False), 'mid': (1250, W / 2, 1960, False), 'left': (800, 270, 1940, False), 'right': (800, W - 270, 1940, False), 'low': (1600, W / 2 + 160, 2080, False)}[mode]
+    h, cx, by, mir = cfg
+    p = ease(lt / 0.45); sc = 1 + 0.025 * amp + 0.01 * math.sin(lt * 2.2)
+    im = coach_img(h, mir)
+    if abs(sc - 1) > 0.004: im = im.resize((int(im.width * sc), int(im.height * sc)), Image.BILINEAR)
+    rot = 1.5 * math.sin(lt * 3.1) * amp
+    if abs(rot) > 0.2: im = im.rotate(rot, resample=Image.BICUBIC, expand=True)
+    x = int(cx - im.width / 2 + (1 - p) * (-300 if cx < W / 2 else 300 if cx > W / 2 else 0)); y = int(by - im.height + (1 - p) * 400)
+    frame.alpha_composite(im, (x, y))
+
 # --------------- frame ---------------
 def init():
     global GRAIN
@@ -195,6 +220,9 @@ def render_frame(args):
     t = fi / FPS; scenes = spec['scenes']
     si = max(i for i, s in enumerate(scenes) if s['start'] <= t + 1e-6); sc = scenes[si]; lt = t - sc['start']
     frame = background(spec, sc, lt, t)
+    if sc.get('coach'):
+        env = spec.get('env'); amp = float(env[min(fi, len(env) - 1)]) if env is not None else 0.5
+        draw_coach(frame, sc['coach'], lt, amp, st['accent'])
     k = sc.get('prop'); light = st['mode'] == 'card'
     if k == 'ball':
         b = ball(max(40, int(300 * back(lt / 0.6))), lt * 160); frame.alpha_composite(b, (int(W / 2 - b.width / 2), int(sc.get('py', 1380) - b.height / 2 + math.sin(lt * 5) * 16)))
@@ -254,6 +282,11 @@ def build(spec):
         sr, a = tts(sc['say'], f'/tmp/{name}_{i}.wav', spec.get('speed', 0.9)); a = resample(a, sr)
         dur = max(sc.get('min', 1.6), len(a) / SR + 0.3); sc['start'] = t; sc['dur'] = dur; voice.append((t + 0.1, a)); t += dur
     total = t + 0.4; spec['total'] = total; spec['fdir'] = fdir; n = int(total * FPS)
+    vtmp = np.zeros(int(total * SR) + SR, np.float32)
+    for s0, a in voice:
+        s1 = int(s0 * SR); vtmp[s1:s1 + len(a)] += a
+    hop = SR // FPS; e = np.array([np.sqrt(np.mean(vtmp[i * hop:(i + 1) * hop] ** 2)) for i in range(n)])
+    spec['env'] = list(np.clip(e / (e.max() + 1e-6) * 1.4, 0, 1))
     with Pool(2, initializer=init) as pool: list(pool.imap_unordered(render_frame, [(spec, i) for i in range(n)], chunksize=4))
     N = int(total * SR); vo = np.zeros(N, np.float32)
     for s0, a in voice:
@@ -274,7 +307,7 @@ def build(spec):
     return outs
 
 if __name__ == '__main__':
-    specs = json.load(open('/home/claude/futbol/specs2.json'))
+    specs = json.load(open(os.environ.get('SPECS', '/home/claude/futbol/specs2.json')))
     for sp in specs: sp['style'] = {k: (tuple(v) if isinstance(v, list) else v) for k, v in sp['style'].items()}
     if sys.argv[1:2] == ['--stills']:
         init()
