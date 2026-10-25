@@ -3,3 +3,6 @@ Kit de videos de futbol (perfil devo.s3, espanhol LATAM).
 2) Vozes: bash ../narrar.sh baixa o motor; para espanhol baixe vits-piper-es_MX-claude-high (ou es_MX-ald-medium) em /home/claude/tts (mesmo padrao de URL do narrar.sh).
 3) Copie gen.py e gen2.py para /home/claude/futbol, escreva specs2.json com novas cenas (estilos: full, split, card, premium, warn) e rode: python3 gen2.py <nome>. Saida em /home/claude/futbol/out2.
 Varie SEMPRE estilo, cores, clip de fundo, gancho e transicoes entre videos.
+
+CLIPS DISPONIVEIS (kit-futbol/clips): training-1 (finalizacao), training-2 (chute), training-3 (ataque/pontas), training-4 (drible e passe), campo-equipo (equipe em campo, 94 s, com legendas em espanhol; use trechos variados).
+VARIEDADE OBRIGATORIA: nunca repita a mesma combinacao clip+estilo+cores dois dias seguidos. Alterne trechos (cs) diferentes dos clips, espelhe horizontalmente (ImageOps.mirror), troque crop/zoom, color grade (frio, quente, P&B), e use imagens de cenarios variados geradas no Canva (generate-image: campos de terra, futsal, campo sintetico a noite, escolinha infantil, vestiario, prancheta) como fundo com zoom lento.
