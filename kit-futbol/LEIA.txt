@@ -12,3 +12,5 @@ AVATAR DO TREINADOR (EXCLUSIVO DO PROJETO @devo.s3 / +2.000 Ejercicios de Futbol
 - Na cena use "coach": "close" | "mid" | "left" | "right" | "low" (enquadramentos diferentes = cortes e angulos). Ele reage ao volume da voz (balanco sutil). Exemplo completo: specs3.json.
 - Estrategia: alterne angulos a cada cena (close no gancho, right/left junto da prancheta, low no erro comum, mid no CTA); teste versoes com e sem o treinador; nunca o mesmo enquadramento em cenas seguidas.
 - Ele nao mexe a boca (sem lip-sync). Texto e narracao carregam a explicacao; nao escreva que ele "esta falando" de verdade.
+
+REFERENCIAS DO DONO (OBRIGATORIO LER): kit-futbol/referencias/ESTILO.md e os videos ref_motion_1..4.mp4. Esse e o padrao "motion graphics profissional" que ele quer: minimalista, frases curtas centralizadas, mockups, camera em movimento suave, transicoes cinematograficas, rotulos HUD, anel de miniaturas e logo final.
