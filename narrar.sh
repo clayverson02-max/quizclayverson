@@ -2,13 +2,14 @@
 # Narração grátis e offline (sherpa-onnx + vozes Piper pt-BR).
 # Uso: bash narrar.sh "texto" saida.mp3 [voz] [velocidade]
 #   voz: faber-medium (masc, padrão) | dii-high | miro-high | cadu-medium | jeff-medium
+#   espanhol: es_AR-daniela-high (feminina) | es_MX-claude-high (masc) | es_MX-ald-medium (masc)
 #   velocidade: 1.0 normal, 0.9 mais rápido, 1.1 mais lento
 set -e
 TXT="$1"; OUT="${2:-narracao.mp3}"; VOZ="${3:-faber-medium}"; VEL="${4:-0.92}"
 D="${TTS_DIR:-$HOME/tts}"; mkdir -p "$D"; cd "$D"
 V=1.12.15; E="sherpa-onnx-v$V-linux-x64-shared"; R=https://github.com/k2-fsa/sherpa-onnx/releases/download
 [ -d "$E" ] || curl -sL "$R/v$V/$E.tar.bz2" | tar xj
-M="vits-piper-pt_BR-$VOZ"
+case "$VOZ" in *_*) M="vits-piper-$VOZ";; *) M="vits-piper-pt_BR-$VOZ";; esac
 [ -d "$M" ] || curl -sL "$R/tts-models/$M.tar.bz2" | tar xj
 ONNX=$(ls "$M"/*.onnx | head -1)
 LD_LIBRARY_PATH="$E/lib" "./$E/bin/sherpa-onnx-offline-tts" --vits-model="$ONNX" --vits-tokens="$M/tokens.txt" \
