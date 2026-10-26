@@ -1,0 +1,171 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#05070a;font-family:Inter,sans-serif}
+#cam{position:absolute;inset:0}
+.sc{position:absolute;inset:0;overflow:hidden;opacity:0;background:#05070a}
+.bgv{position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover;filter:saturate(1.15) contrast(1.1) brightness(.62)}
+.grade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,10,.75) 0%,rgba(5,7,10,.15) 35%,rgba(5,7,10,.25) 60%,rgba(5,7,10,.92) 100%)}
+.tint{position:absolute;inset:0;mix-blend-mode:color;background:#0a2a3a;opacity:.35}
+.H{position:absolute;left:60px;right:60px;text-align:center;font-family:'Inter Display',Inter,sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.92;color:#fff;transform-origin:50% 50%}
+.H .w{display:inline-block;opacity:0;margin:0 .09em;transform-origin:50% 60%}
+.H .y{color:#facc15}.H .g{color:#22c55e}
+.cond{display:inline-block;transform:scaleX(.86)}
+.kick{position:absolute;left:0;right:0;text-align:center;font-family:'Inter Display';font-weight:800;font-size:46px;letter-spacing:.32em;color:#facc15;opacity:0}
+.split{position:absolute;inset:0}
+.pane{position:absolute;top:0;bottom:0;width:62%;overflow:hidden}
+.pane img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.6) saturate(1.2)}
+.p1{left:0;clip-path:polygon(0 0,100% 0,62% 100%,0 100%)}
+.p2{right:0;clip-path:polygon(38% 0,100% 0,100% 100%,0 100%)}
+.bar{position:absolute;left:-10%;width:120%;height:14px;background:#facc15;transform:rotate(-58deg);top:50%}
+.spot{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,transparent 0,transparent 260px,rgba(0,0,0,.85) 520px)}
+.mosaic{position:absolute;left:50%;top:52%;width:1500px;height:1700px;margin:-850px 0 0 -750px;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;transform:rotateX(18deg) rotateZ(-10deg);transform-style:preserve-3d}
+.persp{position:absolute;inset:0;perspective:1800px}
+.mt{border-radius:22px;overflow:hidden;opacity:0;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.mt img{width:100%;height:100%;object-fit:cover;display:block}
+.mt b{position:absolute;left:12px;bottom:10px;font-size:22px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);padding:4px 10px;border-radius:8px}
+.chipz{position:absolute;left:60px;right:60px;top:1240px;display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.cz{padding:16px 28px;border-radius:999px;background:#facc15;color:#111;font-weight:900;font-size:34px;text-transform:uppercase;letter-spacing:-.01em;opacity:0}
+.cz.d{background:#fff}
+.plat{position:absolute;width:520px;height:620px;right:70px;top:560px;border-radius:36px;overflow:hidden;border:8px solid #0e0f0f;box-shadow:0 40px 80px rgba(0,0,0,.6);opacity:0}
+.plat img{width:100%;object-fit:cover;object-position:top}
+.card{position:absolute;width:860px;height:230px;left:110px;top:700px;border-radius:30px;padding:28px 30px 28px 150px;color:#111;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.55);opacity:0;transform-origin:50% 120%}
+.card .ic{position:absolute;left:30px;top:50%;margin-top:-50px;width:100px;height:100px;border-radius:20px;display:grid;place-items:center;font-size:44px;color:#fff;font-weight:900}
+.card b{display:block;font-family:'Inter Display';font-weight:900;font-size:46px;letter-spacing:-.03em;line-height:1.02;margin-top:22px}
+.card span{display:block;font-size:24px;color:#57534e;font-weight:600;margin-top:8px}
+.stamp{position:absolute;right:22px;top:22px;padding:8px 16px;border:4px solid #16a34a;color:#16a34a;font-weight:900;font-size:24px;border-radius:10px;transform:rotate(8deg);letter-spacing:.06em}
+.price{position:absolute;left:0;right:0;text-align:center;font-family:'Inter Display';font-weight:900;letter-spacing:-.05em}
+.strike{position:absolute;height:14px;background:#ef4444;border-radius:8px;left:290px;top:700px;width:0;transform:rotate(-8deg);transform-origin:left center}
+.badge{position:absolute;width:220px;height:220px;border-radius:50%;background:#ef4444;color:#fff;display:grid;place-items:center;font-family:'Inter Display';font-weight:900;font-size:76px;letter-spacing:-.04em;right:40px;top:860px;opacity:0;box-shadow:0 20px 50px rgba(239,68,68,.5)}
+.badge:before{content:"";position:absolute;inset:-14px;border-radius:50%;border:5px dashed #ef4444}
+.seal{position:absolute;left:50%;top:560px;width:560px;height:560px;margin-left:-280px;opacity:0}
+.marq{position:absolute;left:-200px;width:1500px;height:96px;display:flex;align-items:center;white-space:nowrap;font-family:'Inter Display';font-weight:900;font-size:46px;text-transform:uppercase;letter-spacing:.02em}
+.btn{position:absolute;left:50%;top:1080px;transform:translateX(-50%);padding:40px 64px;border-radius:999px;background:#22c55e;color:#04140a;font-family:'Inter Display';font-weight:900;font-size:54px;letter-spacing:-.02em;white-space:nowrap;opacity:0;box-shadow:0 20px 60px rgba(34,197,94,.55)}
+.arrow{position:absolute;left:50%;top:1290px;margin-left:-40px;width:80px;height:120px;opacity:0}
+.cap{position:absolute;left:50px;right:50px;top:1690px;text-align:center;z-index:60}
+.cap span{display:inline-block;font-family:'Inter Display';font-weight:900;font-size:58px;text-transform:uppercase;letter-spacing:-.02em;color:#fff;margin:0 14px;text-shadow:0 4px 0 #000,0 0 24px rgba(0,0,0,.9);transform-origin:50% 70%}
+.cap span.on{color:#facc15;transform:scale(1.12)}
+.cap span.fut{opacity:.0}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:70;pointer-events:none}
+.leak{position:absolute;inset:0;z-index:65;pointer-events:none;background:radial-gradient(60% 40% at 0% 20%,rgba(250,204,21,.45),transparent 70%),radial-gradient(50% 35% at 100% 80%,rgba(34,197,94,.35),transparent 70%);mix-blend-mode:screen;opacity:0}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.07;z-index:66;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence baseFrequency='.85' numOctaves='2'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>")}
+.prog{position:absolute;left:0;top:0;height:8px;background:#facc15;z-index:80;width:0}
+</style></head><body>
+<div id="cam"></div>
+<div class="leak" id="leak"></div><div class="grain"></div><div class="flash" id="flash"></div>
+<div class="cap" id="cap"></div><div class="prog" id="prog"></div>
+<script>
+const P=new URLSearchParams(location.search); const V=P.get('v')||'jugador';
+const $=id=>document.getElementById(id);
+const E='cubic-bezier(.2,.8,.2,1)', EIO='cubic-bezier(.65,0,.35,1)', BK='cubic-bezier(.34,1.56,.64,1)', SLAM='cubic-bezier(.2,1.4,.4,1)';
+const anims=[], ups=[];
+function A(el,kf,start,dur,ease=E,fill='both'){ if(typeof el==='string') el=$(el); const a=el.animate(kf,{duration:dur*1000,delay:start*1000,fill,easing:ease}); a.pause(); anims.push(a); return a; }
+const C='../clips/';
+const fr=(d,f)=>C+d+'/'+String(f).padStart(4,'0')+'.jpg';
+const NF={t1:357,t2:450,t3:740,t4:450,w1:600};
+function clip(img,dir,f0,t0,t1){ ups.push(async t=>{ if(t<t0-.1||t>t1+.1) return; const f=1+((f0+Math.floor(Math.max(0,t-t0)*30))%NF[dir]); const s=fr(dir,f); if(!img.src.endsWith(s)){ img.src=s; try{await img.decode();}catch(e){} } }); }
+function words(el){ const html=el.innerHTML; el.innerHTML=html.split(/(<br>)/).map(seg=>seg==='<br>'?seg:seg.split(' ').filter(Boolean).map(w=>{ const m=w.match(/^\[(y|g)\](.*)$/); return m?`<span class="w ${m[1]}">${m[2]}</span>`:`<span class="w">${w}</span>`; }).join(' ')).join(''); return [...el.querySelectorAll('.w')]; }
+function slamWords(el,t0,span){ const ws=words(el); ws.forEach((w,i)=>{ const s=t0+span*i/Math.max(1,ws.length); A(w,[{opacity:0,transform:'scale(2.2)',filter:'blur(8px)'},{opacity:1,transform:'scale(1)',filter:'blur(0)'}],s,.28,SLAM); }); return ws.map((w,i)=>t0+span*i/Math.max(1,ws.length)); }
+function shake(t0,amp=18){ A('cam',[0,1,2,3,4,5].map(i=>({transform:i===5?'none':`translate(${(i%2?1:-1)*amp*(1-i/5)}px,${(i%3-1)*amp*.6*(1-i/5)}px)`})),t0,.28,'linear','none'); }
+function flash(t0,o=.8){ A('flash',[{opacity:0},{opacity:o,offset:.15},{opacity:0}],t0,.35,'ease-out','none'); }
+function leak(t0,d=1.2){ A('leak',[{opacity:0},{opacity:.9,offset:.3},{opacity:0}],t0,d,'ease-in-out','none'); }
+const VOD=JSON.parse(P.get('vo')||'[]'); // [{text,dur}]
+const PAD=.6; const S=[]; { let s=0; VOD.forEach((v,i)=>{ S.push(s); s+= v.dur+PAD+(i===0?.15:0)+(i===VOD.length-1?1.4:0); }); S.push(s); }
+const VS=S.slice(0,-1).map((s,i)=>s+(i===0?.3:.18)); window.VS=VS; window.DUR=S[S.length-1]; window.SS=S;
+const T={
+ jugador:{c0:['t3',80],c1:['t1',30],c1b:['t2',60],c2:['t3',400],
+  h0:'¿Ya imaginaste<br>entrar a la cancha<br>sabiendo<br>[y]qué hacer?', h1:'Salir del<br>[y]banco<br>y ganarte<br>tu lugar', h2:'¿Que tu<br>entrenador<br>te mire<br>[y]diferente?',
+  m1:'Eso no es suerte.', m2:'Es [g]método.',
+  chips:['Regate','Tiro','Velocidad','Técnica','Por posición','En tu celular'],
+  cta:'Quiero empezar hoy'},
+ entrenador:{c0:['t4',40],c1:['t2',120],c1b:['t1',90],c2:['t4',300],
+  h0:'¿Ya imaginaste<br>tu sesión lista<br>en [y]15<br>[y]minutos?', h1:'Jugadores<br>[y]motivados<br>evolucionando<br>cada semana', h2:'¿Que el club<br>note la<br>[y]diferencia?',
+  m1:'No improvises.', m2:'Ten [g]método.',
+  chips:['Sub-8 a Adulto','Físico','Táctico','Técnico','Por posición','Sesión en 15 min'],
+  cta:'Armar mi sesión hoy'}}[V];
+const cam=$('cam');
+function scene(i,html){ const d=document.createElement('section'); d.className='sc'; d.id='s'+i; d.innerHTML=html; cam.appendChild(d);
+  const a=S[i], b=S[i+1];
+  A(d,[{opacity:0},{opacity:1}],a,.01,'linear','forwards');
+  A(d,[{transform:'scale(1.28)',filter:'blur(14px)'},{transform:'scale(1)',filter:'blur(0)'}],a,.32,E,'forwards');
+  A(d,[{opacity:1},{opacity:0}],b,.01,'linear','forwards');
+  A(d,[{transform:'scale(1)'},{transform:'scale(1.06)'}],a+.3,b-a,'linear').effect.composite='add';
+  if(i) { shake(a,22); } return d; }
+// 0 HOOK 1
+{ const i=0,a=S[0],L=S[1]-S[0]; const d=scene(i,`<img class="bgv"><div class="tint"></div><div class="grade"></div><div class="H" id="h0" style="top:430px;font-size:140px"><span class="cond">${T.h0}</span></div>`);
+  clip(d.querySelector('img'),T.c0[0],T.c0[1],a,a+L); const h=$('h0').firstElementChild; const ts=slamWords(h,a+.3,L*.62); ts.forEach((t,k)=>{ if(k%3===0) shake(t,10); }); leak(a+.1,1.4); }
+// 1 HOOK 2 split
+{ const i=1,a=S[1],L=S[2]-S[1]; const d=scene(i,`<div class="split"><div class="pane p1"><img></div><div class="pane p2"><img></div><div class="bar"></div></div><div class="grade" style="opacity:.6"></div>
+  <div class="kick" id="k1" style="top:360px">¿Ya imaginaste?</div><div class="H" id="h1" style="top:470px;font-size:124px"><span class="cond">${T.h1}</span></div>`);
+  const im=d.querySelectorAll('img'); clip(im[0],T.c1[0],T.c1[1],a,a+L); clip(im[1],T.c1b[0],T.c1b[1],a,a+L);
+  A(d.querySelector('.p1'),[{transform:'translateX(-100%)'},{transform:'none'}],a,.45,E); A(d.querySelector('.p2'),[{transform:'translateX(100%)'},{transform:'none'}],a+.08,.45,E);
+  A(d.querySelector('.bar'),[{transform:'rotate(-58deg) scaleX(0)'},{transform:'rotate(-58deg) scaleX(1)'}],a+.25,.4,E);
+  A('k1',[{opacity:0,letterSpacing:'.8em'},{opacity:1,letterSpacing:'.32em'}],a+.15,.5); slamWords($('h1').firstElementChild,a+.35,L*.6); }
+// 2 HOOK 3 spotlight
+{ const i=2,a=S[2],L=S[3]-S[2]; const d=scene(i,`<img class="bgv" style="filter:grayscale(.6) brightness(.7) contrast(1.2)"><div class="spot"></div><div class="H" id="h2" style="top:520px;font-size:150px"><span class="cond">${T.h2}</span></div>`);
+  clip(d.querySelector('img'),T.c2[0],T.c2[1],a,a+L); A(d.querySelector('.spot'),[{transform:'scale(2.2)'},{transform:'scale(1)'}],a,.6,E); slamWords($('h2').firstElementChild,a+.2,L*.55); }
+// 3 METHOD
+{ const i=3,a=S[3],L=S[4]-S[3]; const d=scene(i,`<div class="H" id="m1" style="top:640px;font-size:96px;color:#cbd5e1"><span class="cond">${T.m1}</span></div><div class="H" id="m2" style="top:820px;font-size:230px"><span class="cond">${T.m2}</span></div>
+  <div style="position:absolute;top:780px;left:-300px;width:240px;height:320px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);filter:blur(10px)" id="sweep"></div>`);
+  d.style.background='radial-gradient(80% 50% at 50% 50%,#0f2418,#05070a)';
+  slamWords($('m1').firstElementChild,a+.15,.6); const t2=a+Math.min(L*.45,1.3); slamWords($('m2').firstElementChild,t2,.25); shake(t2+.25,30); flash(t2+.2,.5);
+  A('sweep',[{left:'-300px'},{left:'1200px'}],t2+.45,.7,EIO,'none'); }
+// 4 PRODUCT mosaic
+{ const i=4,a=S[4],L=S[5]-S[4]; const src=[['t1',20],['t2',140],['t3',60],['w1',60],['t4',200],['t3',300],['t2',300],['t1',200],['t4',60],['t3',520],['w1',360],['t2',420],['t1',300],['t4',380],['t3',660],['t2',40]];
+  const lab=['Porteros','Laterales','Centrales','Delanteros','Técnica','Físico','Regate','Tiro','Pase','Velocidad','Táctica','Agilidad','Definición','Control','Rondos','Circuitos'];
+  const d=scene(i,`<div class="persp"><div class="mosaic" id="mos">${src.map((s,k)=>`<div class="mt"><img src="${fr(s[0],s[1])}"><b>${lab[k]}</b></div>`).join('')}</div></div>
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,10,.92) 0%,rgba(5,7,10,.35) 30%,rgba(5,7,10,.35) 55%,rgba(5,7,10,.95) 75%)"></div>
+  <div class="H" id="pn" style="top:250px;font-size:250px;color:#facc15">+0</div><div class="H" style="top:500px;font-size:84px" id="pt"><span class="cond">ejercicios en video</span></div>
+  <div class="chipz">${T.chips.map((c,k)=>`<div class="cz ${k%2?'d':''}">${c}</div>`).join('')}</div>`);
+  d.querySelectorAll('.mt').forEach((m,k)=>A(m,[{opacity:0,transform:'translateZ(-600px) scale(.6)'},{opacity:1,transform:'none'}],a+.05+k*.045,.5,E));
+  A('mos',[{transform:'rotateX(18deg) rotateZ(-10deg) translateY(120px)'},{transform:'rotateX(18deg) rotateZ(-10deg) translateY(-160px)'}],a,L,'linear');
+  A('pt',[{opacity:0,transform:'translateY(30px)'},{opacity:1,transform:'none'}],a+.6,.4);
+  d.querySelectorAll('.cz').forEach((c,k)=>A(c,[{opacity:0,transform:'scale(.4) rotate(-6deg)'},{opacity:1,transform:'none'}],a+1.2+k*(L*.55/6),.35,BK));
+  ups.push(t=>{ if(t<a||t>a+L) return; const p=Math.min(1,Math.max(0,(t-a-.2)/1.1)); const n=Math.round((1-Math.pow(1-p,3))*2000); $('pn').textContent='+'+(n>=1000?Math.floor(n/1000)+'.'+String(n%1000).padStart(3,'0'):n); });
+  leak(a+1.3,1.0); }
+// 5 BONUS
+{ const i=5,a=S[5],L=S[6]-S[5]; const B=[['Guía de Entrenamiento','Planificación semanal','#16a34a','📋'],['50 Ejercicios de Técnica','Técnica individual','#2563eb','⚽'],['Circuitos Físicos','Preparación física','#ea580c','⚡'],['Bono Sorpresa','Lo descubres al entrar','#111','🎁']];
+  const d=scene(i,`<div class="H" style="top:170px;font-size:150px" id="bt"><span class="cond">+4 [y]bonos</span></div>${B.map((b,k)=>`<div class="card" id="bc${k}"><div class="ic" style="background:${b[2]}">${b[3]}</div><b>${b[0]}</b><span>${b[1]}</span><div class="stamp">INCLUIDO</div></div>`).join('')}`);
+  d.style.background='radial-gradient(90% 60% at 50% 40%,#1c1508,#05070a)';
+  slamWords($('bt').firstElementChild,a+.1,.3);
+  const step=(L-1.2)/4;
+  B.forEach((b,k)=>{ const t=a+.6+k*step; const fin=['translate(0,-300px) rotate(-2deg)','translate(0,-40px) rotate(1.5deg)','translate(0,220px) rotate(-1.5deg)','translate(0,480px) rotate(2deg)'][k];
+    A('bc'+k,[{opacity:0,transform:'translate(0,1200px) rotate(30deg)'},{opacity:1,transform:'translate(0,0) rotate(0deg) scale(1.08)',offset:.6},{opacity:1,transform:fin}],t,.8,E); A('bc'+k,[{transform:'translateY(0)'},{transform:'translateY(-14px)'}],t+.8,a+L-t-.8,'ease-in-out').effect.composite='add'; }); }
+// 6 PRICE
+{ const i=6,a=S[6],L=S[7]-S[6]; const d=scene(i,`<div class="kick" id="pk" style="top:470px;color:#cbd5e1">Antes</div><div class="price" id="old" style="top:560px;font-size:190px;color:#94a3b8">US$ 29,90</div><div class="strike" id="stk"></div>
+  <div class="kick" id="hk" style="top:930px">Hoy solo</div><div class="price" id="new" style="top:1000px;font-size:250px;color:#facc15;opacity:0;white-space:nowrap">US$ 6,50</div><div class="badge" id="bdg">-78%</div>
+  <div class="H" id="pu" style="top:1330px;font-size:50px;white-space:nowrap;opacity:0;color:#e2e8f0">Pago único · Acceso de por vida</div>`);
+  d.style.background='radial-gradient(90% 60% at 50% 55%,#2a0d0d,#05070a)';
+  A('pk',[{opacity:0},{opacity:1}],a+.1,.3); A('old',[{opacity:0,transform:'translateY(40px)'},{opacity:1,transform:'none'}],a+.15,.4);
+  const ts=a+L*.38; A('stk',[{width:'0px'},{width:'540px'}],ts,.3,EIO);
+  const tn=a+L*.55; A('hk',[{opacity:0},{opacity:1}],tn-.2,.3); A('new',[{opacity:0,transform:'scale(2.6)'},{opacity:1,transform:'scale(1)'}],tn,.35,SLAM); shake(tn+.3,34); flash(tn+.28,.6);
+  A('bdg',[{opacity:0,transform:'scale(0) rotate(-200deg)'},{opacity:1,transform:'scale(1) rotate(12deg)'}],tn+.45,.5,BK); A('pu',[{opacity:0,transform:'translateY(30px)'},{opacity:1,transform:'none'}],tn+.7,.4); window.PRICE_T=tn; window.STRIKE_T=ts; }
+// 7 GUARANTEE
+{ const i=7,a=S[7],L=S[8]-S[7]; const d=scene(i,`<svg class="seal" id="seal" viewBox="0 0 200 200"><defs><path id="cp" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+  <circle cx="100" cy="100" r="96" fill="#facc15"/><circle cx="100" cy="100" r="86" fill="none" stroke="#111" stroke-width="2" stroke-dasharray="3 4"/>
+  <g id="ring"><text font-family="Inter Display" font-weight="900" font-size="16" letter-spacing="2.4" fill="#111"><textPath href="#cp">• GARANTÍA INCONDICIONAL • 7 DÍAS </textPath></text></g>
+  <circle cx="100" cy="100" r="56" fill="#111"/><text x="100" y="104" text-anchor="middle" font-family="Inter Display" font-weight="900" font-size="54" fill="#facc15">7</text><text x="100" y="130" text-anchor="middle" font-family="Inter Display" font-weight="800" font-size="16" fill="#fff" letter-spacing="2">DÍAS</text></svg>
+  <div class="H" id="gt" style="top:1190px;font-size:110px"><span class="cond">Riesgo [y]cero</span></div>`);
+  d.style.background='radial-gradient(80% 50% at 50% 40%,#1a1a06,#05070a)';
+  A('seal',[{opacity:0,transform:'scale(.2) rotate(-90deg)'},{opacity:1,transform:'scale(1) rotate(0deg)'}],a+.05,.6,BK); A('ring',[{transform:'rotate(0deg)'},{transform:'rotate(120deg)'}],a,L,'linear'); $('ring').style.transformOrigin='100px 100px';
+  slamWords($('gt').firstElementChild,a+.6,.3); }
+// 8 CTA
+{ const i=8,a=S[8],L=S[9]-S[8]; const mq='Precio promocional • Acceso inmediato • Garantía 7 días • ';
+  const d=scene(i,`<div class="marq" id="mq1" style="top:300px;background:#facc15;color:#111;transform:rotate(-6deg)">${mq.repeat(4)}</div><div class="marq" id="mq2" style="top:1500px;background:#fff;color:#111;transform:rotate(5deg)">${mq.repeat(4)}</div>
+  <div class="H" id="ct" style="top:560px;font-size:120px"><span class="cond">Este precio<br>[y]no es para<br>[y]siempre</span></div>
+  <div class="btn" id="cb">${T.cta} →</div><svg class="arrow" id="ar" viewBox="0 0 80 120"><path d="M40 10v86M12 70l28 30 28-30" fill="none" stroke="#facc15" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+  d.style.background='radial-gradient(80% 50% at 50% 50%,#0d2214,#05070a)';
+  A('mq1',[{transform:'rotate(-6deg) translateX(0)'},{transform:'rotate(-6deg) translateX(-600px)'}],a,L,'linear'); A('mq2',[{transform:'rotate(5deg) translateX(-600px)'},{transform:'rotate(5deg) translateX(0)'}],a,L,'linear');
+  slamWords($('ct').firstElementChild,a+.2,1.0);
+  const tb=a+Math.min(L*.45,2.2); A('cb',[{opacity:0,transform:'translateX(-50%) scale(.3)'},{opacity:1,transform:'translateX(-50%) scale(1)'}],tb,.45,BK); window.BTN_T=tb;
+  for(let k=0;k<4;k++) A('cb',[{transform:'scale(1)'},{transform:'scale(1.07)'},{transform:'scale(1)'}],tb+.6+k*.75,.75,'ease-in-out','none').effect.composite='add';
+  A('ar',[{opacity:0},{opacity:1}],tb+.4,.3); A('ar',[{transform:'translateY(0)'},{transform:'translateY(30px)'},{transform:'translateY(0)'}],tb+.4,.6,'ease-in-out').effect.updateTiming({iterations:6});
+  leak(tb,1.4); }
+// captions
+const CW=[]; VOD.forEach((v,i)=>{ const ws=v.text.split(' '); const wt=ws.map(w=>w.replace(/[^\wáéíóúñü¿?]/gi,'').length+1+(/[,.:?]$/.test(w)?3:0)); const tot=wt.reduce((x,y)=>x+y,0); let c=VS[i]; ws.forEach((w,j)=>{ const dd=v.dur*wt[j]/tot; CW.push({w,s:c,e:c+dd,line:i}); c+=dd; }); });
+{ let ch=0,cnt=0,pl=-1; CW.forEach((x,k)=>{ if(x.line!==pl||cnt>=3||(cnt>=1&&/[.,:?]$/.test(CW[k-1].w))){ch++;cnt=0;pl=x.line;} x.chunk=ch; cnt++; }); }
+function caption(t){ const cur=CW.find(x=>t>=x.s-.03&&t<x.e+.2); const box=$('cap'); if(!cur){ box.innerHTML=''; return; }
+  const ws=CW.filter(x=>x.chunk===cur.chunk); box.innerHTML=ws.map(x=>`<span class="${t>=x.s&&t<x.e+.05?'on':(t>=x.e?'':'fut')}">${x.w.replace(/[.,:]$/,'')}</span>`).join(''); }
+window.setT=async t=>{ for(const a of anims) a.currentTime=t*1000; for(const u of ups) await u(t); caption(t); $('prog').style.width=(t/window.DUR*100)+'%'; };
+</script></body></html>
