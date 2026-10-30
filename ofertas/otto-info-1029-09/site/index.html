@@ -26,7 +26,7 @@ src="https://www.facebook.com/tr?id=1351267993847099&ev=PageView&noscript=1"
 :root{--paper:#FFF9F1;--pine:#1F4A3A;--pine2:#0f2a20;--red:#C8102E;--gold:#F2C14E;--ink:#1a1410;--muted:#4a3f38;
 --h:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;--b:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--b);font-size:19px;line-height:1.6}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--b);font-size:20px;line-height:1.6}
 img,video{max-width:100%;display:block;height:auto}
 .wrap{max-width:640px;margin:0 auto;padding:0 18px}
 .band{padding:44px 0}
@@ -43,7 +43,7 @@ mark{background:var(--gold);color:var(--ink);padding:0 6px;border-radius:4px}
 .cta small{display:block;font:600 .85rem var(--b);opacity:.92;margin-top:4px}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
 @media (prefers-reduced-motion:reduce){.cta{animation:none}}
-.trust{text-align:center;font-size:.95rem;color:inherit;opacity:.9}
+.trust{text-align:center;font-size:1rem;color:inherit;opacity:.9}
 .vsl{border-radius:16px;overflow:hidden;background:#000;box-shadow:0 14px 30px rgba(0,0,0,.25);max-width:360px;margin:6px auto 0}
 ul.x,ul.ok{list-style:none;padding:0;margin:0}
 ul.x li,ul.ok li{position:relative;padding:10px 0 10px 36px;border-bottom:1px solid #eadfcd}
@@ -58,7 +58,9 @@ ul.ok li::before{content:"✓";position:absolute;left:4px;color:#1d8a4e;font-wei
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.two img{border-radius:12px}
 .price{background:var(--pine2);color:#fff;text-align:center}
 .price img{border-radius:14px;margin:0 auto 16px}
-.old{font-size:1rem;opacity:.85}
+.old{font-size:1.05rem;opacity:.9}.was{font:800 1.6rem var(--h);color:#fff;margin:4px 0}.was s{color:#ff9aa8;text-decoration-thickness:3px}.save{display:inline-block;background:var(--red);color:#fff;font:900 1rem var(--h);padding:6px 14px;border-radius:999px;margin:4px 0 2px}
+.new{background:var(--red);color:#fff;font:900 .8rem var(--h);letter-spacing:.12em;padding:4px 10px;border-radius:999px;display:inline-block;margin-bottom:10px}
+.big{font-size:1.2rem}
 .amount{font:900 4.4rem/1 var(--h);color:var(--gold);margin:6px 0}
 .amount small{font-size:1.3rem;color:#fff}
 .stack{text-align:left;background:rgba(255,255,255,.07);border-radius:14px;padding:14px 16px;margin:14px 0}
@@ -86,13 +88,13 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
 
 <section class="band hero">
   <div class="wrap">
+    <span class="new">NOVEDAD 2026</span>
     <div class="eyebrow">Guía digital · Método 1 Masa</div>
-    <h1>Con <mark>UNA sola masa</mark> haces 25 galletas navideñas para regalar o vender</h1>
-    <p class="sub">Aunque nunca hayas decorado una galleta. Sin manga profesional, sin equipos caros y con planilla para saber cuánto cobrar.</p>
+    <h1>Este fin de año <mark>hazlo diferente</mark>: con UNA sola masa haces 25 galletas navideñas para regalar o vender</h1>
+    <p class="sub">Esto es para ti si quieres llegar a diciembre con algo tuyo en las manos. Aunque nunca hayas decorado una galleta: sin manga profesional, sin equipos caros y con la planilla para saber cuánto cobrar.</p>
     <div class="prod"><img src="img/capa.jpg" alt="Guía Galletas de Navidad para Vender"><div><b>Guía en PDF + 2 bonos</b><span>Recetas, decoración fácil, moldes, etiquetas y planilla de precio</span></div></div>
     <div class="vsl"><video src="img/mini-vsl.mp4" poster="img/vsl-poster.jpg" controls playsinline preload="metadata" aria-label="Mini video de la guía"></video></div>
-    <a class="cta" href="#precio">VER LA OFERTA Y MI CUPÓN<small>Acceso inmediato al PDF + 2 bonos</small></a>
-    <p class="trust">🔒 Pago seguro · 📩 Llega a tu correo · ✅ Garantía de 7 días</p>
+    <p class="trust">▶ Mira el video: en 1 minuto ves cómo funciona</p>
   </div>
 </section>
 
@@ -106,7 +108,7 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
       <li>No sabes cuánto cobrar y te da miedo poner un precio injusto.</li>
       <li>Cuando por fin te decides… ya todos compraron sus regalos.</li>
     </ul>
-    <p style="margin-top:16px"><b>Diciembre no espera.</b> Si este año quieres llegar con tus cajitas listas, necesitas un método simple que puedas empezar hoy.</p>
+    <p style="margin-top:16px" class="big"><b>Diciembre no espera.</b> Cada año pasa lo mismo: la temporada llega, otros venden sus cajitas y tú te quedas con las ganas. <b>Este año no.</b> Necesitas un método simple que puedas empezar hoy, en tu cocina.</p>
   </div>
 </section>
 
@@ -140,6 +142,15 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
   </div>
 </section>
 
+<section class="band" style="background:var(--pine);color:#fff">
+  <div class="wrap">
+    <span class="new">ES NUEVO</span>
+    <h2>Imagina un fin de año distinto</h2>
+    <p>La mesa llena de galletas hechas por ti. Cajitas con tu etiqueta, listas para regalar a tu familia o para vender a vecinos, amigos y oficinas. Tú decidiendo qué hacer en diciembre, en vez de ver pasar la temporada otra vez.</p>
+    <p><b style="color:var(--gold)">Esta guía es nueva</b> y fue pensada para la cocina latinoamericana: ingredientes de supermercado, horno de casa y pasos claros desde la primera tanda.</p>
+  </div>
+</section>
+
 <section class="band cream">
   <div class="wrap">
     <h2>¿Para quién es?</h2>
@@ -154,7 +165,8 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
 
 <section class="band price" id="precio">
   <div class="wrap">
-    <h2>Todo por menos de lo que cuesta una cajita de galletas en una pastelería</h2>
+    <h2>Tu fin de año diferente empieza aquí</h2>
+    <p class="big">Todo por menos de lo que cuesta una cajita de galletas en una pastelería.</p>
     <img src="img/banner-checkout.jpg" alt="Guía Galletas de Navidad para Vender" loading="lazy">
     <ul class="ok stack">
       <li>Guía principal (26 páginas) + 25 recetas</li>
@@ -162,13 +174,15 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
       <li>Bono 1: moldes y etiquetas imprimibles</li>
       <li>Bono 2: galletas para empresas</li>
     </ul>
+    <p class="was">Precio: <span id="precio-normal">US$ 35</span></p>
     <p class="old">Pago único, sin mensualidades</p>
     <div id="cupon-off">
-      <p class="trust">Tienes un cupón de lanzamiento disponible para esta guía.</p>
+      <p class="trust big">🎁 Tienes un <b>cupón de lanzamiento</b> para esta guía. Actívalo y mira tu precio.</p>
       <button type="button" class="cta coupon" id="activar">🎟️ ACTIVAR CUPÓN<small>Toca para ver tu precio</small></button>
     </div>
     <div id="cupon-on" hidden>
       <p class="ok-badge">✅ Cupón activado</p>
+      <p class="save">Ahorras US$ 25,01</p>
       <p class="amount"><small>US$</small> 9,99</p>
       <a class="cta" href="#" data-checkout target="_blank" rel="noopener">COMPRAR AHORA Y DESCARGAR<small>Acceso inmediato en tu correo</small></a>
     </div>
@@ -216,6 +230,7 @@ document.querySelectorAll('a[href="#precio"]').forEach(a => a.addEventListener("
 // Cupón: revela el precio real de la oferta (US$ 9,99)
 document.getElementById("activar").addEventListener("click", () => {
   document.getElementById("cupon-off").hidden = true;
+  document.getElementById("precio-normal").innerHTML = "<s>US$ 35</s>";
   const on = document.getElementById("cupon-on"); on.hidden = false; on.classList.add("reveal");
 });
 // Cuenta regresiva real hasta el 24 de diciembre (hora local)
