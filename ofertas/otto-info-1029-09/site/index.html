@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Una sola masa, 25 galletas navideñas listas para regalar o vender. Guía en PDF con recetas, decoración fácil, empaque y planilla de precio.">
+<!-- PIXEL AQUI -->
 <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -72,7 +73,11 @@ details{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:10px}
 summary{font-weight:700;cursor:pointer}
 footer{font-size:.85rem;color:var(--muted);text-align:center;padding:28px 0 90px}
 .sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(255,249,241,.97);padding:10px 14px calc(10px + env(safe-area-inset-bottom));box-shadow:0 -6px 18px rgba(0,0,0,.12);z-index:50;transform:translateY(110%);transition:transform .3s}
-.sticky.on{transform:none}.sticky .cta{margin:0;padding:15px;font-size:1.05rem;animation:none}
+.sticky.on{transform:none}.prod{display:flex;gap:12px;align-items:center;background:rgba(255,255,255,.08);border-radius:14px;padding:10px;margin:14px 0}.prod img{width:84px;border-radius:10px;margin:0}.prod b{display:block;font:800 1.05rem var(--h)}.prod span{font-size:.92rem;color:#E9F1EC}
+button.cta{border:0;cursor:pointer;font-family:var(--h)}.cta.coupon{background:var(--gold);color:var(--ink);box-shadow:0 6px 0 #a67c1c}
+.ok-badge{display:inline-block;background:#1d8a4e;color:#fff;font:800 .95rem var(--h);padding:6px 14px;border-radius:999px;margin:6px 0 0}
+.reveal{animation:pop .5s cubic-bezier(.34,1.56,.64,1)}@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+.sticky .cta{margin:0;padding:15px;font-size:1.05rem;animation:none}
 a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"],.lovable-badge,#lovable-badge,[id*=lovable-badge]{display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;position:absolute!important;z-index:-9999!important}
 </style>
 </head><body>
@@ -84,8 +89,9 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
     <div class="eyebrow">Guía digital · Método 1 Masa</div>
     <h1>Con <mark>UNA sola masa</mark> haces 25 galletas navideñas para regalar o vender</h1>
     <p class="sub">Aunque nunca hayas decorado una galleta. Sin manga profesional, sin equipos caros y con planilla para saber cuánto cobrar.</p>
-    <div class="vsl"><video src="img/mini-vsl.mp4" poster="img/vsl-poster.jpg" controls playsinline preload="none" aria-label="Mini video de la guía"></video></div>
-    <a class="cta" href="#precio">SÍ, QUIERO MI GUÍA POR US$ 7<small>Acceso inmediato al PDF + 2 bonos</small></a>
+    <div class="prod"><img src="img/capa.jpg" alt="Guía Galletas de Navidad para Vender"><div><b>Guía en PDF + 2 bonos</b><span>Recetas, decoración fácil, moldes, etiquetas y planilla de precio</span></div></div>
+    <div class="vsl"><video src="img/mini-vsl.mp4" poster="img/vsl-poster.jpg" controls playsinline preload="metadata" aria-label="Mini video de la guía"></video></div>
+    <a class="cta" href="#precio">VER LA OFERTA Y MI CUPÓN<small>Acceso inmediato al PDF + 2 bonos</small></a>
     <p class="trust">🔒 Pago seguro · 📩 Llega a tu correo · ✅ Garantía de 7 días</p>
   </div>
 </section>
@@ -115,7 +121,7 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
       <li><b>Decoración fácil</b> con glasé y una bolsita de plástico</li>
     </ul>
     <div class="two" style="margin-top:16px"><img src="img/gancho1.jpg" alt="Galletas navideñas decoradas" loading="lazy"><img src="img/gancho3.jpg" alt="Galletas navideñas para regalar" loading="lazy"></div>
-    <a class="cta" href="#precio">QUIERO EMPEZAR HOY<small>US$ 7 · pago único</small></a>
+    <a class="cta" href="#precio">QUIERO EMPEZAR HOY<small>Pago único · activa tu cupón</small></a>
   </div>
 </section>
 
@@ -130,7 +136,7 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
       <div class="card"><img src="img/mockup_bono2.jpg" alt="Bono 2: galletas para empresas" loading="lazy"><span class="tag red">BONO 2 · INCLUIDO</span><h3>Galletas para empresas</h3><p>Cómo armar, presentar y entregar cajitas navideñas para oficinas, equipos y clientes.</p></div>
     </div>
     <img src="img/cajitas.jpg" alt="Galletas decoradas con glasé" loading="lazy" style="border-radius:16px;margin-top:18px">
-    <a class="cta" href="#precio">QUIERO LA GUÍA + LOS 2 BONOS<small>Todo por US$ 7</small></a>
+    <a class="cta" href="#precio">QUIERO LA GUÍA + LOS 2 BONOS<small>Ver precio con cupón</small></a>
   </div>
 </section>
 
@@ -157,10 +163,16 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
       <li>Bono 2: galletas para empresas</li>
     </ul>
     <p class="old">Pago único, sin mensualidades</p>
-    <p class="amount"><small>US$</small> 7</p>
-    <a class="cta" href="#" data-checkout target="_blank" rel="noopener">COMPRAR AHORA Y DESCARGAR<small>Acceso inmediato en tu correo</small></a>
-    <p class="trust">La Navidad llega en:</p>
-    <div class="count" aria-live="polite"><div><span data-d>—</span><small>días</small></div><div><span data-h>—</span><small>horas</small></div><div><span data-m>—</span><small>min</small></div></div>
+    <div id="cupon-off">
+      <p class="trust">Tienes un cupón de lanzamiento disponible para esta guía.</p>
+      <button type="button" class="cta coupon" id="activar">🎟️ ACTIVAR CUPÓN<small>Toca para ver tu precio</small></button>
+    </div>
+    <div id="cupon-on" hidden>
+      <p class="ok-badge">✅ Cupón activado</p>
+      <p class="amount"><small>US$</small> 9,99</p>
+      <a class="cta" href="#" data-checkout target="_blank" rel="noopener">COMPRAR AHORA Y DESCARGAR<small>Acceso inmediato en tu correo</small></a>
+    </div>
+    <p class="trust">🔒 Pago seguro · ✅ Garantía de 7 días</p>
     <p class="trust">Cuanto antes empieces, más tandas alcanzas a hornear antes del 24.</p>
   </div>
 </section>
@@ -188,7 +200,7 @@ a[href*="lovable.dev"],iframe[src*="lovable.dev"],div[style*="Edit with Lovable"
 
 <footer><div class="wrap"><p>Producto digital (PDF). Los resultados dependen de cada persona. Pagos procesados por la plataforma de pago.</p></div></footer>
 
-<div class="sticky" id="sticky"><a class="cta" href="#precio">QUIERO MI GUÍA · US$ 7</a></div>
+<div class="sticky" id="sticky"><a class="cta" href="#precio">VER OFERTA CON CUPÓN</a></div>
 
 <script>
 // Link de checkout (Hotmart/Cakto). Las UTM del anuncio pasan al checkout.
@@ -197,15 +209,20 @@ document.querySelectorAll("[data-checkout]").forEach(a => a.addEventListener("cl
   if (!CHECKOUT_URL) { e.preventDefault(); return; }
   const q = location.search.slice(1);
   a.href = q ? CHECKOUT_URL + (CHECKOUT_URL.includes("?") ? "&" : "?") + q : CHECKOUT_URL;
-  try { window.fbq && fbq("track", "InitiateCheckout", {value: 7, currency: "USD"}); } catch (err) {}
+  try { window.fbq && fbq("track", "InitiateCheckout", {value: 9.99, currency: "USD"}); } catch (err) {}
 }));
 let leadSent=false;
 document.querySelectorAll('a[href="#precio"]').forEach(a => a.addEventListener("click", () => { if(leadSent) return; leadSent=true; try { window.fbq && fbq("track", "Lead"); } catch (err) {} }));
+// Cupón: revela el precio real de la oferta (US$ 9,99)
+document.getElementById("activar").addEventListener("click", () => {
+  document.getElementById("cupon-off").hidden = true;
+  const on = document.getElementById("cupon-on"); on.hidden = false; on.classList.add("reveal");
+});
 // Cuenta regresiva real hasta el 24 de diciembre (hora local)
 function tick(){const n=new Date();let t=new Date(n.getFullYear(),11,24);if(n>t)t=new Date(n.getFullYear()+1,11,24);
 const s=Math.max(0,t-n),d=Math.floor(s/864e5),h=Math.floor(s/36e5)%24,m=Math.floor(s/6e4)%60;
-document.querySelectorAll("[data-days],[data-d]").forEach(e=>e.textContent=d);
-document.querySelectorAll("[data-h]").forEach(e=>e.textContent=h);document.querySelectorAll("[data-m]").forEach(e=>e.textContent=m);}
+document.querySelectorAll("[data-days]").forEach(e=>e.textContent=d);
+}
 tick();setInterval(tick,30000);
 const st=document.getElementById("sticky"),pr=document.getElementById("precio");
 addEventListener("scroll",()=>{const r=pr.getBoundingClientRect();st.classList.toggle("on",scrollY>600&&!(r.top<innerHeight&&r.bottom>0));},{passive:true});
