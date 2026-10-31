@@ -52,6 +52,7 @@ textarea{font:16px var(--t);color:var(--ink);background:var(--panel);border:1px 
 <script type="application/json" id="dados">
 {"cliente":{"nome":"Sua loja","segmento":"Loja de roupas","responsavel":"","instagram":""},
  "gestor":{"nome":"Clayverson","whatsapp":""},
+ "ia":{"nome":"Sua consultora","persona":"","conhecimento":"","foco":""},
  "hoje":{"data":"","saudacao":"Bom dia! Seu painel está sendo preparado pela equipe.","numeros":null,"rotina":[]},
  "ideias":[],"relatorios":[],"materiais":[]}
 </script>
@@ -79,7 +80,7 @@ function render(){
       <div class="row">${r.texto?`<button class="btn" type="button" data-copy="${i}">Copiar texto</button>`:''}<button class="btn ${feitos[i]?'':'pri'}" type="button" data-feito="${i}">${feitos[i]?'✓ Feito':'Marcar como feito'}</button></div></div></div>`).join('')}</div>` : '<p class="note">A rotina do dia aparece aqui todas as manhãs.</p>'}
   </div>
   ${D.ideias.length ? `<div class="card"><h2>Ideias de conteúdo</h2><div class="list">${D.ideias.map(x => `<div class="it"><b>${esc(x.titulo)}</b><small>${esc(x.formato||'')}</small>${x.roteiro?`<p class="note" style="white-space:pre-wrap">${esc(x.roteiro)}</p>`:''}</div>`).join('')}</div></div>` : ''}
-  <div class="card" id="assist"><h2>Assistente da loja</h2><p class="note">Tire dúvidas sobre vendas, atendimento, stories e anúncios. Ele conhece a sua loja e a rotina de hoje.</p><div id="assist-body"><p class="note">Carregando…</p></div></div>
+  <div class="card" id="assist"><h2>${esc(D.ia&&D.ia.nome||"Assistente da loja")}</h2><p class="note">${esc(D.ia&&D.ia.persona||"Sua consultora de vendas. Pergunte sobre atendimento, stories, grupo VIP e anúncios.")}</p><div id="assist-body"><p class="note">Carregando…</p></div></div>
   ${D.relatorios.length ? `<div class="card"><h2>Relatórios</h2><div class="list">${D.relatorios.map(x => `<div class="it"><b>${esc(x.periodo)}</b><div class="met"><div><span>Investido</span><b>${BRL(x.gasto)}</b></div><div><span>Conversas</span><b>${NUM(x.conversas)}</b></div><div><span>Custo/conv.</span><b>${BRL(x.custoConversa)}</b></div></div></div>`).join('')}</div></div>` : ''}
   ${D.materiais.length ? `<div class="card"><h2>Materiais da sua loja</h2><div class="list">${D.materiais.map(x => `<div class="it"><b>${esc(x.titulo)}</b>${x.resumo?`<small>${esc(x.resumo)}</small>`:''}${x.url?`<div class="row"><a class="btn" href="${esc(x.url)}" target="_blank" rel="noopener">Abrir</a></div>`:''}</div>`).join('')}</div></div>` : ''}
   ${gw ? `<div class="card"><h2>Falar com seu gestor</h2><p class="note">${esc(D.gestor.nome)} acompanha seus anúncios.</p><div class="row"><a class="btn wa" href="${gw}" target="_blank" rel="noopener">Chamar no WhatsApp</a></div><p class="note">${esc(D.gestor.whatsapp)}</p></div>` : ''}`;
@@ -91,7 +92,7 @@ async function setupAssist(){
   const el = document.getElementById('assist-body'); if (!el) return;
   if (!sampleTried){ sampleTried = true; sample = window.claude ? await window.claude.use('sample') : null; }
   if (!sample){ el.innerHTML = `<p class="note">Para conversar com o assistente, abra este painel com a sua conta do Claude. Enquanto isso, fale com o seu gestor pelo WhatsApp.</p>`; return; }
-  el.innerHTML = `<div class="chat" id="chat">${chatLog.map(m => `<div class="bub ${m.role==='user'?'me':'ai'}">${esc(m.content)}</div>`).join('') || '<div class="bub ai">Oi! Me conta: como estão as vendas hoje? Posso sugerir o próximo passo.</div>'}</div>
+  el.innerHTML = `<div class="chat" id="chat">${chatLog.map(m => `<div class="bub ${m.role==='user'?'me':'ai'}">${esc(m.content)}</div>`).join('') || '<div class="bub ai">Oi! Sou ${esc((D.ia&&D.ia.nome)||'sua consultora')}. Me conta: como estão as vendas hoje? Te digo o próximo passo.</div>'}</div>
     <form id="askf"><textarea id="ask" rows="2" maxlength="800" placeholder="Ex.: o que posto hoje à tarde?" aria-label="Pergunta para o assistente"></textarea><div class="row"><button class="btn pri" type="submit">Perguntar</button></div></form>`;
   const ch = document.getElementById('chat'); ch.scrollTop = ch.scrollHeight;
 }
@@ -99,7 +100,8 @@ document.addEventListener('submit', async e => {
   if (e.target.id !== 'askf') return; e.preventDefault();
   const q = document.getElementById('ask').value.trim(); if (!q || !sample) return;
   chatLog.push({role:'user', content:q});
-  const ctx = 'Você é o assistente de vendas da loja "'+C.nome+'" ('+C.segmento+'), criado pela assessoria de tráfego de '+(D.gestor.nome||'')+'. Fale em português do Brasil, simples e direto, como um consultor próximo, com no máximo 6 linhas e sempre terminando com UMA ação concreta para fazer hoje. Dê estratégias práticas de atendimento no WhatsApp, follow-up, grupo VIP, stories e vitrine. Não prometa resultados, não invente números e não altere anúncios: para mudanças nos anúncios, diga para falar com o gestor. Dados de hoje: '+JSON.stringify({rotina:H.rotina, numeros:N, ideias:D.ideias.slice(0,3)});
+  const IA = D.ia||{};
+  const ctx = 'Você é '+(IA.nome||'a consultora')+', consultora de vendas da loja "'+C.nome+'" ('+C.segmento+'), da assessoria de '+(D.gestor.nome||'')+'. '+(IA.persona||'')+' O que você sabe sobre o ramo e esta loja: '+(IA.conhecimento||'').slice(0,6000)+' Foco atual: '+(IA.foco||'')+'. Fale em português do Brasil, simples e direto, como um consultor próximo, com no máximo 6 linhas e sempre terminando com UMA ação concreta para fazer hoje. Dê estratégias práticas de atendimento no WhatsApp, follow-up, grupo VIP, stories e vitrine. Não prometa resultados, não invente números e não altere anúncios: para mudanças nos anúncios, diga para falar com o gestor. Dados de hoje: '+JSON.stringify({rotina:H.rotina, numeros:N, ideias:D.ideias.slice(0,3)});
   const msgs = [{role:'user', content: ctx + '\n\nConversa até agora:\n' + chatLog.slice(-8,-1).map(m => (m.role==='user'?'Lojista: ':'Assistente: ')+m.content).join('\n') + '\n\nPergunta do lojista: ' + q}];
   chatLog.push({role:'assistant', content:'Pensando…'}); setupAssist();
   try {
