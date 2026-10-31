@@ -92,7 +92,7 @@ async function setupAssist(){
   const el = document.getElementById('assist-body'); if (!el) return;
   if (!sampleTried){ sampleTried = true; sample = window.claude ? await window.claude.use('sample') : null; }
   if (!sample){ el.innerHTML = `<p class="note">Para conversar com o assistente, abra este painel com a sua conta do Claude. Enquanto isso, fale com o seu gestor pelo WhatsApp.</p>`; return; }
-  el.innerHTML = `<div class="chat" id="chat">${chatLog.map(m => `<div class="bub ${m.role==='user'?'me':'ai'}">${esc(m.content)}</div>`).join('') || '<div class="bub ai">Oi! Sou ${esc((D.ia&&D.ia.nome)||'sua consultora')}. Me conta: como estão as vendas hoje? Te digo o próximo passo.</div>'}</div>
+  el.innerHTML = `<div class="chat" id="chat">${chatLog.map(m => `<div class="bub ${m.role==='user'?'me':'ai'}">${esc(m.content)}</div>`).join('') || '<div class="bub ai">Oi! Sou '+esc((D.ia&&D.ia.nome)||'sua consultora')+'. Me conta: como estão as vendas hoje? Te digo o próximo passo.</div>'}</div>
     <form id="askf"><textarea id="ask" rows="2" maxlength="800" placeholder="Ex.: o que posto hoje à tarde?" aria-label="Pergunta para o assistente"></textarea><div class="row"><button class="btn pri" type="submit">Perguntar</button></div></form>`;
   const ch = document.getElementById('chat'); ch.scrollTop = ch.scrollHeight;
 }
