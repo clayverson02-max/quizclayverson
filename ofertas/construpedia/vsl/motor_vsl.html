@@ -1,0 +1,169 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden}
+#st{position:relative;overflow:hidden;font-family:Inter,sans-serif;color:#13294b}
+.sc{position:absolute;inset:0;display:none;overflow:hidden}
+.bg-paper{background:#f4f0e6}
+.bg-blue{background:#0f2747}
+.bg-dark{background:#14161a}
+.grid{position:absolute;inset:-20%;background-image:linear-gradient(rgba(19,41,75,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(19,41,75,.09) 1px,transparent 1px);background-size:calc(var(--u)*4) calc(var(--u)*4)}
+.bg-blue .grid,.bg-dark .grid{background-image:linear-gradient(rgba(140,190,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(140,190,255,.12) 1px,transparent 1px)}
+.c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.h{font-family:'Inter Display',Inter;font-weight:900;letter-spacing:-.02em;line-height:1.02;text-align:center}
+.w{display:inline-block;margin:0 .12em}
+.or{color:#f26a1b}
+.wh{color:#fff}
+.hud{font:700 calc(var(--u)*2.1) Inter;letter-spacing:.18em;color:#f26a1b;text-transform:uppercase;text-align:center}
+.card{background:#fff;border-radius:calc(var(--u)*1.6);box-shadow:0 calc(var(--u)*1.5) calc(var(--u)*4) rgba(10,20,40,.25)}
+#cap{position:absolute;left:0;right:0;text-align:center;font:900 calc(var(--u)*4.6) 'Inter Display';letter-spacing:-.01em;z-index:50;padding:0 6%}
+#cap span{display:inline-block;margin:0 .14em;color:#fff;-webkit-text-stroke:calc(var(--u)*.25) #000;paint-order:stroke fill;text-shadow:0 calc(var(--u)*.4) calc(var(--u)*1) rgba(0,0,0,.6)}
+#cap span.on{color:#ffb21e}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:60;pointer-events:none}
+#vig{position:absolute;inset:0;z-index:55;pointer-events:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.35))}
+#grain{position:absolute;inset:-50%;z-index:56;opacity:.06;pointer-events:none}
+svg text{font-family:Inter;font-weight:700}
+.dev{position:absolute;background:#111;border-radius:calc(var(--u)*2.2);padding:calc(var(--u)*.9);box-shadow:0 calc(var(--u)*2) calc(var(--u)*5) rgba(0,0,0,.35)}
+.scr{width:100%;height:100%;border-radius:calc(var(--u)*1.4);background:#f4f0e6;overflow:hidden;position:relative}
+.tile{position:absolute;border-radius:calc(var(--u)*.8);background:#13294b;color:#fff;font:800 calc(var(--u)*1.1) Inter;display:flex;align-items:flex-end;padding:calc(var(--u)*.6);line-height:1.1}
+.tile i{position:absolute;top:calc(var(--u)*.6);left:calc(var(--u)*.6);width:28%;height:4px;background:#f26a1b;border-radius:2px}
+</style></head><body><div id="st">
+<div id="scenes"></div>
+<div id="cap"></div><div id="vig"></div><canvas id="grain"></canvas><div id="flash"></div>
+</div>
+<script>
+const P=new URLSearchParams(location.search);const W=+P.get('w')||1920,H=+P.get('h')||1080;const V=H>W;
+const st=document.getElementById('st');st.style.width=W+'px';st.style.height=H+'px';
+const U=Math.min(W,H)/100*(V?1:1.22);st.style.setProperty('--u',U+'px');
+const TL=window.TL;
+const cl=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const oc=x=>1-Math.pow(1-cl(x),3);
+const ob=x=>{x=cl(x);const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const io=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const S=document.getElementById('scenes');
+function mk(cls,html){const d=document.createElement('div');d.className='sc '+cls;d.innerHTML=html;S.appendChild(d);return d}
+const words=(s,cls='')=>s.split(' ').map(w=>`<span class="w ${cls}">${w}</span>`).join('');
+// ---------- SVG drawings ----------
+const ICON={
+col:'<rect x="38" y="10" width="24" height="80" fill="none" stroke="currentColor" stroke-width="5"/><line x1="44" y1="10" x2="44" y2="90" stroke="#f26a1b" stroke-width="3"/><line x1="56" y1="10" x2="56" y2="90" stroke="#f26a1b" stroke-width="3"/><line x1="38" y1="30" x2="62" y2="30" stroke="currentColor" stroke-width="3"/><line x1="38" y1="50" x2="62" y2="50" stroke="currentColor" stroke-width="3"/><line x1="38" y1="70" x2="62" y2="70" stroke="currentColor" stroke-width="3"/>',
+helm:'<path d="M15 66 Q15 26 50 24 Q85 26 85 66 Z" fill="none" stroke="currentColor" stroke-width="5"/><rect x="8" y="64" width="84" height="10" rx="4" fill="#f26a1b"/><line x1="50" y1="24" x2="50" y2="64" stroke="currentColor" stroke-width="4"/>',
+bolt:'<path d="M56 6 L22 56 H46 L40 94 L78 40 H54 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><circle cx="50" cy="50" r="6" fill="#f26a1b"/>',
+pipe:'<path d="M10 30 H60 Q74 30 74 44 V90" fill="none" stroke="currentColor" stroke-width="12"/><path d="M10 30 H60 Q74 30 74 44 V90" fill="none" stroke="#f4f0e6" stroke-width="4"/><path d="M30 60 Q30 74 38 80 Q46 74 46 60 Q38 48 38 48 Q30 60 30 60Z" fill="#f26a1b"/>',
+weld:'<line x1="12" y1="80" x2="88" y2="80" stroke="currentColor" stroke-width="6"/><path d="M30 80 L50 58 L70 80" fill="none" stroke="currentColor" stroke-width="5"/><g stroke="#f26a1b" stroke-width="4"><line x1="50" y1="50" x2="50" y2="30"/><line x1="58" y1="52" x2="72" y2="38"/><line x1="42" y1="52" x2="28" y2="38"/></g>',
+brick:'<g fill="none" stroke="currentColor" stroke-width="4"><rect x="10" y="20" width="38" height="18"/><rect x="52" y="20" width="38" height="18"/><rect x="10" y="42" width="18" height="18"/><rect x="32" y="42" width="38" height="18"/><rect x="74" y="42" width="16" height="18"/><rect x="10" y="64" width="38" height="18"/><rect x="52" y="64" width="38" height="18"/></g><path d="M60 90 L90 74" stroke="#f26a1b" stroke-width="6"/>',
+topo:'<line x1="50" y1="40" x2="22" y2="92" stroke="currentColor" stroke-width="5"/><line x1="50" y1="40" x2="78" y2="92" stroke="currentColor" stroke-width="5"/><line x1="50" y1="40" x2="50" y2="92" stroke="currentColor" stroke-width="5"/><rect x="32" y="14" width="36" height="22" rx="4" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="50" cy="25" r="5" fill="#f26a1b"/>',
+safe:'<path d="M50 8 L86 22 V48 Q86 78 50 92 Q14 78 14 48 V22 Z" fill="none" stroke="currentColor" stroke-width="5"/><path d="M34 50 L46 62 L68 38" fill="none" stroke="#f26a1b" stroke-width="7"/>'};
+const AREAS=[['Estructuras y Concreto Armado','col'],['Maestro de Obra y Residente','helm'],['Electricidad','bolt'],['Instalaciones Sanitarias','pipe'],['Soldadura','weld'],['Acabados y Albañilería','brick'],['Topografía','topo'],['Seguridad en Obra','safe']];
+const ic=(k,s)=>`<svg viewBox="0 0 100 100" width="${s}" height="${s}" style="color:inherit">${ICON[k]}</svg>`;
+const ZAP=`<svg viewBox="0 0 600 520" width="100%" height="100%">
+<rect width="600" height="520" fill="#fffdf7"/>
+<text x="30" y="44" font-size="26" fill="#13294b" font-weight="900">DETALLE DE ZAPATA AISLADA</text><text x="30" y="70" font-size="15" fill="#f26a1b">CORTE A-A · Esc. 1:25</text>
+<rect x="60" y="400" width="480" height="18" fill="#cfc8b8"/><text x="545" y="414" font-size="12" fill="#555">solado</text>
+<rect x="110" y="300" width="380" height="100" fill="#e6e1d6" stroke="#13294b" stroke-width="3" class="zp"/>
+<rect x="250" y="110" width="100" height="190" fill="#e6e1d6" stroke="#13294b" stroke-width="3"/>
+<g stroke="#c0392b" stroke-width="4"><line x1="128" y1="382" x2="472" y2="382"/><line x1="128" y1="382" x2="128" y2="350"/><line x1="472" y1="382" x2="472" y2="350"/>
+<line x1="268" y1="120" x2="268" y2="378"/><line x1="332" y1="120" x2="332" y2="378"/><line x1="268" y1="378" x2="232" y2="378"/><line x1="332" y1="378" x2="368" y2="378"/></g>
+<g stroke="#13294b" stroke-width="2.5" fill="none"><rect x="262" y="140" width="76" height="8"/><rect x="262" y="185" width="76" height="8"/><rect x="262" y="230" width="76" height="8"/><rect x="262" y="275" width="76" height="8"/></g>
+<g font-size="15" fill="#13294b"><line x1="350" y1="160" x2="440" y2="140" stroke="#f26a1b" stroke-width="2"/><text x="445" y="144">columna</text>
+<line x1="338" y1="234" x2="440" y2="210" stroke="#f26a1b" stroke-width="2"/><text x="445" y="214">estribos</text>
+<line x1="268" y1="170" x2="150" y2="150" stroke="#f26a1b" stroke-width="2"/><text x="40" y="146">acero longitudinal</text>
+<line x1="200" y1="382" x2="170" y2="460" stroke="#f26a1b" stroke-width="2"/><text x="60" y="478">parrilla inferior</text>
+<line x1="440" y1="340" x2="500" y2="270" stroke="#f26a1b" stroke-width="2"/><text x="470" y="262">zapata</text>
+<line x1="490" y1="382" x2="490" y2="400" stroke="#13294b"/><text x="380" y="478">recubrimiento 7.5 cm</text><line x1="460" y1="465" x2="490" y2="398" stroke="#f26a1b" stroke-width="2"/></g></svg>`;
+const VIGA=`<svg viewBox="0 0 400 400" width="100%" height="100%"><rect width="400" height="400" fill="#fffdf7"/>
+<text x="20" y="36" font-size="20" fill="#13294b" font-weight="900">SECCIÓN DE VIGA</text>
+<rect x="110" y="70" width="180" height="280" fill="#e6e1d6" stroke="#13294b" stroke-width="3"/>
+<rect x="130" y="90" width="140" height="240" rx="8" fill="none" stroke="#13294b" stroke-width="4"/>
+<g fill="#c0392b"><circle cx="142" cy="102" r="9"/><circle cx="258" cy="102" r="9"/><circle cx="142" cy="318" r="9"/><circle cx="258" cy="318" r="9"/><circle cx="200" cy="318" r="9"/></g>
+<g font-size="14" fill="#13294b"><line x1="270" y1="200" x2="320" y2="180" stroke="#f26a1b" stroke-width="2"/><text x="300" y="172">estribo</text>
+<line x1="258" y1="318" x2="320" y2="360" stroke="#f26a1b" stroke-width="2"/><text x="250" y="384">acero longitudinal</text>
+<line x1="110" y1="60" x2="130" y2="60" stroke="#f26a1b" stroke-width="3"/><text x="20" y="64">recubrimiento</text></g></svg>`;
+const TAB=`<svg viewBox="0 0 400 400" width="100%" height="100%"><rect width="400" height="400" fill="#fffdf7"/>
+<text x="20" y="36" font-size="20" fill="#13294b" font-weight="900">TABLERO RESIDENCIAL</text>
+<rect x="90" y="60" width="220" height="300" rx="10" fill="#e9ecef" stroke="#13294b" stroke-width="3"/>
+<g fill="#fff" stroke="#13294b" stroke-width="2">${[0,1,2,3,4,5].map(i=>`<rect x="${110+(i%3)*62}" y="${100+Math.floor(i/3)*80}" width="50" height="62" rx="4"/>`).join('')}</g>
+<rect x="110" y="270" width="112" height="62" rx="4" fill="#fff" stroke="#f26a1b" stroke-width="3"/><text x="122" y="306" font-size="13" fill="#13294b">DIFERENCIAL</text>
+<line x1="300" y1="340" x2="300" y2="390" stroke="#2e8b57" stroke-width="4"/><g stroke="#2e8b57" stroke-width="4"><line x1="284" y1="390" x2="316" y2="390"/><line x1="290" y1="396" x2="310" y2="396"/></g>
+<text x="250" y="384" font-size="12" fill="#2e8b57" text-anchor="end">puesta a tierra</text></svg>`;
+function platform(cols){return AREAS.map((a,i)=>{const r=Math.floor(i/cols),c=i%cols;return `<div class="tile" style="left:${4+c*(92/cols)}%;top:${22+r*(74/Math.ceil(8/cols))}%;width:${92/cols-3}%;height:${74/Math.ceil(8/cols)-4}%"><i></i>${a[0]}</div>`}).join('')}
+function screen(cols){return `<div class="scr"><div style="position:absolute;left:0;right:0;top:0;height:16%;background:#13294b;color:#fff;font:900 calc(var(--u)*1.5) 'Inter Display';display:flex;align-items:center;padding-left:5%">CONSTRUPEDIA<span style="color:#f26a1b;margin-left:.3em">●</span></div>${platform(cols)}</div>`}
+// ---------- scenes ----------
+const sc=[];
+// 0 hook
+sc[0]=mk('bg-dark',`<div class="grid"></div>
+<svg class="rebar" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;opacity:.5">${Array.from({length:14},(_,i)=>`<line x1="${i*7.7}" y1="0" x2="${i*7.7+8}" y2="100" stroke="#8a5a3c" stroke-width=".7"/>`).join('')}${Array.from({length:10},(_,i)=>`<line x1="0" y1="${i*11}" x2="100" y2="${i*11+3}" stroke="#6d4a33" stroke-width=".5"/>`).join('')}</svg>
+<div style="position:absolute;left:0;right:0;top:0;height:calc(var(--u)*3);background:repeating-linear-gradient(45deg,#f2b705 0 calc(var(--u)*2),#111 calc(var(--u)*2) calc(var(--u)*4))"></div>
+<div class="c" style="width:88%;top:${V?36:40}%"><div class="hud" style="margin-bottom:calc(var(--u)*2)">▲ maestro · residente · técnico</div><div class="h wh hook" style="font-size:calc(var(--u)*${V?8:7.4})">${words('¿Trabajas en obra y todavía buscas en Google')} ${words('cómo armar una zapata?','or')}</div></div>
+<div class="c gbar card" style="top:${V?66:76}%;width:${V?84:52}%;height:calc(var(--u)*7.5);display:flex;align-items:center;padding:0 calc(var(--u)*2.4);font:500 calc(var(--u)*3) Inter;color:#333;border-radius:999px"><span style="font-size:1.1em;margin-right:.6em">🔍</span><span class="gtxt"></span><span class="cur" style="width:2px;height:1.1em;background:#333;margin-left:2px"></span></div>`);
+// 1 scattered info
+const bits=[['video_zapata_FINAL.mp4','▶'],['manual (1).pdf','PDF'],['foro: ¿cuánto acero lleva?','?'],['grupo de WhatsApp','💬'],['tabla_vieja.xls','XLS'],['video 2 (parte 3)','▶']];
+sc[1]=mk('bg-paper',`<div class="grid"></div>${bits.map((b,i)=>`<div class="card bit" style="position:absolute;padding:calc(var(--u)*1.6) calc(var(--u)*2.2);font:700 calc(var(--u)*2.6) Inter;display:flex;gap:.6em;align-items:center;white-space:nowrap"><b style="background:#13294b;color:#fff;border-radius:6px;padding:.1em .4em;font-size:.8em">${b[1]}</b>${b[0]}</div>`).join('')}
+<div class="c h" style="font-size:calc(var(--u)*${V?7:6});top:${V?18:16}%;width:90%">${words('Información')} ${words('regada','or')}</div>`);
+// 2 error sale caro
+sc[2]=mk('bg-dark',`<div class="grid"></div><div class="c h wh big" style="font-size:calc(var(--u)*${V?13:12});width:92%">${words('UN ERROR')}<br>${words('SALE CARO','or')}</div>`);
+// 3 three errors
+sc[3]=mk('bg-paper',`<div class="grid"></div>
+<div class="c" style="width:${V?80:86}%;height:${V?64:66}%;top:${V?44:52}%;display:flex;${V?'flex-direction:column;':''}gap:calc(var(--u)*2.5)">
+${[['Estribo mal colocado',VIGA],['Recubrimiento que no cumple',VIGA],['Puesta a tierra sin revisar',TAB]].map((e,i)=>`<div class="card err" style="flex:1;position:relative;overflow:hidden;padding:calc(var(--u)*1)"><div style="position:absolute;inset:${V?'0 45% 0 0':'0 0 22% 0'}">${e[1]}</div><div style="position:absolute;${V?'right:3%;top:50%;transform:translateY(-50%);width:40%':'left:0;right:0;bottom:4%'};text-align:center;font:900 calc(var(--u)*2.6) 'Inter Display';color:#c0392b">✕ ${e[0]}</div><div class="ring" style="position:absolute;border:calc(var(--u)*.6) solid #c0392b;border-radius:50%;width:calc(var(--u)*${V?10:12});height:calc(var(--u)*${V?10:12});left:${V?'18%':'42%'};top:${V?'20%':'30%'}"></div></div>`).join('')}</div>`);
+// 4 reveal
+sc[4]=mk('bg-blue',`<div class="grid"></div><div class="c" style="top:${V?24:30}%;width:90%;text-align:center"><div class="hud" style="color:#ffb21e">▲ todo en un solo lugar</div><div class="h wh logo" style="font-size:calc(var(--u)*${V?11:10});margin-top:calc(var(--u)*1.5)">CONSTRU<span class="or">PEDIA</span></div><div class="sub" style="color:#cfe0ff;font:600 calc(var(--u)*3) Inter;margin-top:calc(var(--u)*1)">La biblioteca visual de la construcción</div></div>
+<div class="dev lap" style="width:${V?86:54}%;height:${V?30:44}%;left:50%;top:${V?62:68}%;transform:translate(-50%,-50%)">${screen(4)}</div>`);
+// 5-12 areas
+const PAL=[['#f4f0e6','#13294b'],['#0f2747','#fff'],['#f26a1b','#fff'],['#f4f0e6','#13294b'],['#14161a','#fff'],['#e9e2d2','#13294b'],['#0f2747','#fff'],['#f2b705','#13294b']];
+AREAS.forEach((a,i)=>{const [bg,fg]=PAL[i];sc[5+i]=mk('',`<div style="position:absolute;inset:0;background:${bg}"></div><div class="grid" style="opacity:.6"></div>
+<div class="c area" style="width:90%;text-align:center;color:${fg}"><div class="aic" style="display:inline-block;color:${fg}">${ic(a[1],U*(V?26:24))}</div><div class="hud" style="color:${bg=='#f26a1b'||bg=='#f2b705'?fg:'#f26a1b'};margin-top:calc(var(--u)*1.5)">▲ ala de la plataforma</div><div class="h" style="font-size:calc(var(--u)*${a[0].length>20?(V?7.4:7.6):(V?10:10)});color:${fg};margin-top:calc(var(--u)*1)">${a[0]}</div></div>`)});
+// 13 inside manual
+sc[13]=mk('bg-paper',`<div class="grid"></div><div class="hud c" style="top:${V?10:9}%">▲ por dentro del manual</div>
+<div class="card pg" style="position:absolute;overflow:hidden;width:${V?88:54}%;aspect-ratio:600/520;left:50%;top:${V?50:54}%;transform:translate(-50%,-50%)">${ZAP}</div>`);
+// 14 bonus
+const BON=[['Calculadoras de materiales','calc'],['Detalles constructivos','det'],['Plantillas de presupuesto','pres'],['Certificado','cert']];
+const bonViz={calc:`<div style="font:700 calc(var(--u)*1.5) Inter;color:#13294b;text-align:left;line-height:1.7">Concreto f'c 210<br>Largo <b style="float:right">4.00 m</b><br>Ancho <b style="float:right">0.25 m</b><br>Alto <b style="float:right">0.50 m</b><div style="background:#13294b;color:#fff;border-radius:6px;padding:.2em .5em;margin-top:.3em">Volumen <b style="float:right;color:#ffb21e">0.50 m³</b></div></div>`,det:`<div style="height:calc(var(--u)*13)">${VIGA}</div>`,pres:`<div style="font:600 calc(var(--u)*1.35) Inter;color:#13294b;text-align:left;line-height:1.8">${['Partida','Cemento','Arena gruesa','Piedra chancada','Acero 1/2"','Mano de obra'].map((x,i)=>`<div style="border-bottom:1px solid #ddd;${i==0?'font-weight:900;color:#f26a1b':''}">${x}<span style="float:right">${i==0?'Total':'—'}</span></div>`).join('')}</div>`,cert:`<div style="border:3px double #13294b;padding:calc(var(--u)*1.2);font:900 calc(var(--u)*1.7) 'Inter Display';color:#13294b">CERTIFICADO<div style="font:500 calc(var(--u)*1.1) Inter;margin-top:.5em">Construpedia</div><div style="width:calc(var(--u)*4);height:calc(var(--u)*4);border-radius:50%;background:#f26a1b;margin:.6em auto 0"></div></div>`};
+sc[14]=mk('bg-blue',`<div class="grid"></div><div class="hud c" style="top:${V?10:10}%;color:#ffb21e">▲ bonos incluidos</div><div class="c" style="top:${V?54:56}%;width:${V?90:90}%;display:grid;grid-template-columns:${V?'1fr 1fr':'repeat(4,1fr)'};gap:calc(var(--u)*2)">
+${BON.map(b=>`<div class="card bon" style="padding:calc(var(--u)*2);text-align:center;min-height:calc(var(--u)*${V?30:30})"><div style="font:900 calc(var(--u)*2.2) 'Inter Display';color:#13294b;margin-bottom:calc(var(--u)*1.2);min-height:2.3em">${b[0]}</div>${bonViz[b[1]]}</div>`).join('')}</div>`);
+// 15 devices
+sc[15]=mk('bg-paper',`<div class="grid"></div><div class="hud c" style="top:${V?10:10}%">▲ celular · tablet · computadora</div>
+<div class="dev d1" style="width:${V?80:46}%;height:${V?26:46}%;left:${V?10:8}%;top:${V?20:24}%">${screen(4)}</div>
+<div class="dev d2" style="width:${V?52:22}%;height:${V?28:46}%;left:${V?6:56}%;top:${V?50:32}%">${screen(2)}</div>
+<div class="dev d3" style="width:${V?34:13}%;height:${V?34:56}%;left:${V?60:80}%;top:${V?48:26}%;border-radius:calc(var(--u)*3)">${screen(1)}</div>`);
+// 16 offer
+sc[16]=mk('bg-dark',`<div class="grid"></div><div class="c" style="width:90%;text-align:center">${['Un solo pago','Acceso de por vida','7 días de garantía'].map((x,i)=>`<div class="h wh of" style="font-size:calc(var(--u)*${V?8.5:7.5});margin:calc(var(--u)*1.2) 0">${i==2?'<span class="or">':''}${x}${i==2?'</span>':''}</div>`).join('')}</div>
+<div class="seal" style="position:absolute;right:${V?8:10}%;top:${V?14:12}%;width:calc(var(--u)*${V?20:18});height:calc(var(--u)*${V?20:18});border-radius:50%;background:#f26a1b;color:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column;font:900 calc(var(--u)*5) 'Inter Display';box-shadow:0 0 0 calc(var(--u)*.8) #fff inset">7<span style="font-size:.32em;letter-spacing:.1em">DÍAS</span><span style="font-size:.26em">GARANTÍA</span></div>`);
+// 17 CTA
+sc[17]=mk('bg-blue',`<div class="grid"></div><div class="c" style="width:90%;text-align:center;top:${V?40:42}%"><div class="h wh" style="font-size:calc(var(--u)*${V?9:8})">CONSTRU<span class="or">PEDIA</span></div><div style="color:#cfe0ff;font:600 calc(var(--u)*2.8) Inter;margin:calc(var(--u)*1) 0 calc(var(--u)*4)">La biblioteca visual de la construcción</div>
+<div class="btn" style="display:inline-block;background:#f26a1b;color:#fff;font:900 calc(var(--u)*4.4) 'Inter Display';padding:calc(var(--u)*2) calc(var(--u)*5);border-radius:999px">Toca el botón de abajo</div><div class="arr" style="font:900 calc(var(--u)*9) Inter;color:#ffb21e;margin-top:calc(var(--u)*1)">↓</div></div>`);
+// grain
+const g=document.getElementById('grain');g.width=256;g.height=256;const gx=g.getContext('2d');const id=gx.createImageData(256,256);for(let i=0;i<id.data.length;i+=4){const v=Math.random()*255;id.data[i]=id.data[i+1]=id.data[i+2]=v;id.data[i+3]=255}gx.putImageData(id,0,0);g.style.width=W*2+'px';g.style.height=H*2+'px';g.style.imageRendering='pixelated';
+// captions
+const cap=document.getElementById('cap');cap.style.bottom=(V?17:7)+'%';
+function caption(t){const L=TL.find(l=>t>=l.vs-0.05&&t<l.vs+l.vd+0.35);if(!L||(L.i>=5&&L.i<=12)||L.i==17){cap.innerHTML='';return}
+const ws=L.text.split(' ');const tot=ws.reduce((a,w)=>a+w.length+2,0);let acc=0,cur=0;const p=cl((t-L.vs)/L.vd)*tot;ws.forEach((w,i)=>{if(p>=acc)cur=i;acc+=w.length+2});
+const ch=V?3:4;const st0=Math.floor(cur/ch)*ch;cap.innerHTML=ws.slice(st0,st0+ch).map((w,i)=>`<span class="${st0+i==cur?'on':''}">${w}</span>`).join('')}
+// render
+function wordsIn(el,lt,dur,sel='.w'){const ws=el.querySelectorAll(sel);ws.forEach((w,i)=>{const k=ob((lt-i*dur/ws.length)/0.28);w.style.opacity=cl(k*3);w.style.transform=`translateY(${(1-k)*40}%) scale(${0.6+0.4*k})`})}
+const fl=document.getElementById('flash');
+window.render=function(t){let k=TL.findIndex(l=>t>=l.s&&t<l.e);if(k<0)k=TL.length-1;const L=TL[k];const lt=t-L.s,D=L.e-L.s;
+sc.forEach((s,i)=>s.style.display=i==k?'block':'none');const s=sc[k];
+// transition in
+const tin=oc(lt/0.3);const mode=k%4;let tr='';
+if(k>0){if(mode==0)tr=`scale(${1.25-0.25*tin})`;else if(mode==1)tr=`translateX(${(1-tin)*30}%)`;else if(mode==2)tr=`translateY(${(1-tin)*25}%)`;else tr=`scale(${0.85+0.15*tin}) rotate(${(1-tin)*-3}deg)`}
+const push=1+0.04*(lt/D);const sh=(k==0&&lt<0.4)||(k==2)?Math.sin(t*90)*U*0.4*(k==2?cl(1-lt/1.2):1):0;
+s.style.transform=`${tr} scale(${push}) translate(${sh}px,${sh*0.6}px)`;s.style.filter=k>0&&lt<0.2&&mode==1?`blur(${(1-lt/0.2)*12}px)`:'none';
+fl.style.opacity=(k>0&&(mode==0||k==4||k==16))?cl(0.7-lt/0.18):0;
+const gr=s.querySelector('.grid');if(gr)gr.style.transform=`translate(${-lt*U*1.2}px,${-lt*U*.6}px)`;
+if(k==0){wordsIn(s.querySelector('.hook'),lt,1.6);const q='cómo armar una zapata';const n=Math.floor(cl((lt-1.4)/1.4)*q.length);s.querySelector('.gtxt').textContent=q.slice(0,n);s.querySelector('.cur').style.opacity=Math.floor(t*3)%2;const gb=s.querySelector('.gbar');const kk=ob((lt-1.0)/0.4);gb.style.opacity=cl(kk);gb.style.transform=`translate(-50%,-50%) scale(${0.7+0.3*kk})`}
+if(k==1){wordsIn(s.querySelector('.h'),lt,0.6);s.querySelectorAll('.bit').forEach((b,i)=>{const kk=ob((lt-0.15*i)/0.4);const ang=i*1.05+lt*0.5;const rx=V?28:34,ry=V?24:26;b.style.left=(50+Math.cos(ang)*rx)+'%';b.style.top=(56+Math.sin(ang*1.3)*ry)+'%';b.style.transform=`translate(-50%,-50%) rotate(${Math.sin(i+lt)*8}deg) scale(${kk})`;b.style.opacity=cl(kk)})}
+if(k==2){wordsIn(s.querySelector('.big'),lt,0.5)}
+if(k==3){const per=(L.vd)/3;s.querySelectorAll('.err').forEach((e,i)=>{const kk=ob((lt-0.1-i*per)/0.35);e.style.opacity=cl(kk);e.style.transform=`scale(${0.8+0.2*kk})`;const r=e.querySelector('.ring');const rk=oc((lt-0.4-i*per)/0.3);r.style.transform=`scale(${rk})`;r.style.opacity=rk})}
+if(k==4){const lg=s.querySelector('.logo');const kk=ob((lt-0.1)/0.5);lg.style.transform=`scale(${0.5+0.5*kk})`;lg.style.opacity=cl(kk);const sb=s.querySelector('.sub');sb.style.opacity=cl((lt-0.6)/0.4);const lp=s.querySelector('.lap');const k2=oc((lt-1.2)/0.6);lp.style.transform=`translate(-50%,${-50+(1-k2)*40}%) perspective(1000px) rotateX(${(1-k2)*25}deg)`;lp.style.opacity=k2;lp.querySelectorAll('.tile').forEach((ti,i)=>{const k3=ob((lt-1.6-i*0.12)/0.3);ti.style.transform=`scale(${k3})`})}
+if(k>=5&&k<=12){const a=s.querySelector('.aic');const kk=ob(lt/0.35);a.style.transform=`scale(${kk}) rotate(${(1-kk)*-20}deg)`;const h=s.querySelector('.h');h.style.transform=`translateY(${(1-oc((lt-0.08)/0.3))*60}%)`;h.style.opacity=cl((lt-0.05)/0.2)}
+if(k==13){const pg=s.querySelector('.pg');const z=lt<2.2?1:1+0.9*io((lt-2.2)/1.2);const ox=lt<2.2?0:-14*io((lt-2.2)/1.2),oy=lt<2.2?0:16*io((lt-2.2)/1.2);const kk=oc(lt/0.5);pg.style.transform=`translate(-50%,-50%) translate(${ox}%,${oy}%) scale(${(0.85+0.15*kk)*z}) rotate(${(1-kk)*4}deg)`;
+const sw=lt>4.4;pg.innerHTML=sw?(pg.dataset.v=='v'?pg.innerHTML:(pg.dataset.v='v',VIGA)):(pg.dataset.v=='z'?pg.innerHTML:(pg.dataset.v='z',ZAP));if(sw){pg.style.aspectRatio='1/1';pg.style.transform=`translate(-50%,-50%) scale(${(V?0.9:0.7)*(1+0.06*(lt-4.4))})`}else pg.style.aspectRatio='600/520'}
+if(k==14){const per=L.vd/4.2;s.querySelectorAll('.bon').forEach((b,i)=>{const kk=ob((lt-0.1-i*per)/0.4);b.style.transform=`perspective(900px) rotateY(${(1-kk)*80}deg) scale(${0.8+0.2*kk})`;b.style.opacity=cl(kk*2)})}
+if(k==15){['.d1','.d2','.d3'].forEach((q,i)=>{const d=s.querySelector(q);const kk=ob((lt-0.1-i*0.9)/0.45);d.style.transform=`translateY(${(1-kk)*60}%) scale(${0.8+0.2*kk})`;d.style.opacity=cl(kk*2)})}
+if(k==16){const per=L.vd/3.3;s.querySelectorAll('.of').forEach((o,i)=>{const kk=ob((lt-0.05-i*per)/0.35);o.style.opacity=cl(kk);o.style.transform=`scale(${1.6-0.6*kk})`});const se=s.querySelector('.seal');const kk=ob((lt-2*per)/0.4);se.style.transform=`scale(${kk}) rotate(${(1-kk)*-90+Math.sin(lt*2)*4}deg)`}
+if(k==17){const b=s.querySelector('.btn');b.style.transform=`scale(${1+0.05*Math.sin(lt*7)})`;s.querySelector('.arr').style.transform=`translateY(${Math.abs(Math.sin(lt*5))*U*2}px)`}
+caption(t);
+document.getElementById('grain').style.transform=`translate(${-(Math.floor(t*30)*37%256)}px,${-(Math.floor(t*30)*91%256)}px)`;
+};
+window.ready=true;
+</script></body></html>
